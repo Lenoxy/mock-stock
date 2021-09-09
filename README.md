@@ -1,6 +1,6 @@
 # Mock Stock
 
-## Installation
+## Run backend
 Python3, pip3 and Docker are required.
 
 1. Create a venv in the app root
