@@ -1,0 +1,321 @@
+swagger: "2.0"
+info:
+  description: "This is an API for a stock-market simulation game. Let users bet with fake money on real market values. Find the code in our [GitHub Repo](https://github.com/the-philip-baumann/mock-stock)"
+  version: "0.1.0"
+  title: "Mock-Stock"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+- name: "stocks"
+  description: "Show, buy or sell stocks"
+- name: "me"
+  description: "Get infos about me"
+- name: "users"
+  description: "The other users for scoreboard n stuff"
+- name: "auth"
+  description: "For all your authentication needs"
+paths:
+  /stocks/{stock}:
+    get:
+      tags:
+      - "stocks"
+      summary: "Get the values of provided stock"
+      description: "Gets the stock values from the real market."
+      operationId: "getStock"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "stock"
+        description: "The Stock name e.g. AAPL from which we want the data."
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Stock found"
+          schema:
+            $ref: "#/definitions/Stock"
+        "404":
+          description: "Stock not found"
+  /stocks/{stock}/buy:
+    put:
+      tags:
+      - "stocks"
+      summary: "Buy stocks"
+      description: "Buy an amount of Stocks"
+      operationId: "buyStock"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "stock"
+        description: "Stock to buy"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "amount"
+        description: "Amount of stocks to buy"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "Bought stock"
+          schema:
+            $ref: "#/definitions/Stock"
+        "403":
+          description: "Not logged in"
+        "404":
+          description: "Stock not found"
+        "405":
+          description: "Too poor to buy those stocks *sad face*"
+  /stocks/{stock}/sell:
+    put:
+      tags:
+      - "stocks"
+      summary: "Sell stocks"
+      description: "Sell an amount of stocks"
+      operationId: "sellStock"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "stock"
+        description: "Stock to buy"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "amount"
+        description: "Amount of stocks to sell"
+        required: true
+        schema:
+          type: "number"
+      responses:
+        "200":
+          description: "Sold stock"
+          schema:
+            $ref: "#/definitions/Stock"
+        "403":
+          description: "Not logged in"
+        "404":
+          description: "Stock not found"
+        "405":
+          description: "You don't have those stocks, lol"
+  /me:
+    get:
+      tags:
+      - "me"
+      summary: "Get my user data"
+      description: "Gets user data"
+      operationId: "getMyUser"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          description: "You don't have any stocks my friend"
+  /me/stocks:
+    get:
+      tags:
+      - "me"
+      summary: "Get my stocks"
+      description: "Gets a list of the owned stocks with the amount of them."
+      operationId: "getMyStocks"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "header"
+        name: "cookie"
+        description: "The Cookie to identify / authenticate the user"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Stock"
+        "404":
+          description: "You don't have any stocks my friend"
+  /users:
+    get:
+      tags:
+      - "users"
+      summary: "Get users"
+      description: "Gets list of users for leaderboard or inspection of other users data"
+      operationId: "getUsers"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "top"
+        description: "Gets only the top so much users for the leaderboard. If omited, returns all users"
+        required: false
+        type: "number"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        "400":
+          description: "Couldn't get the users"
+  /users/{username}/stocks:
+    get:
+      tags:
+      - "users"
+      summary: "Get users stocks"
+      description: "Gets a list of the stocks with the amount of them owned by the provided user."
+      operationId: "getUsersStocks"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "username"
+        description: "The users username from which we want to get the stocks"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Stock"
+        "404":
+          description: "He doesn't have any stocks, poor dude."
+  /auth/register:
+    post:
+      tags:
+      - "auth"
+      summary: "Create user"
+      description: "Register a new account. This can be done without being signed in."
+      operationId: "createUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User to create, only password and username required"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+  /auth/login:
+    get:
+      tags:
+      - "auth"
+      summary: "Logs user into the system"
+      description: ""
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "Authorization"
+        in: "header"
+        description: "The Username:Password in base64 encoded"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "string"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the user"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+            Cookie:
+              type: "string"
+              description: "The session cookie (JWT)"
+        "400":
+          description: "Invalid username/password supplied"
+  /auth/logout:
+    get:
+      tags:
+      - "auth"
+      summary: "Logs out current logged in user session"
+      description: ""
+      operationId: "logoutUser"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+definitions:
+  Stock:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        example: "AAPL"
+        description: "ID of stock"
+      value:
+        type: "number"
+        example: 155.3456
+        description: "Value of stock in USD"
+      name:
+        type: "string"
+        example: "Apple Inc."
+        description: "The Name of the Company"
+      amount:
+        type: "integer"
+        format: "int64"
+        example: 3
+        description: "The amount of this stock someone holds."
+      valueHistory:
+        type: "array"
+        items:
+          type: "number"
+        example: [170.2, 120.22, 140.00]
+        description: "The History of the score"
+  User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        example: "Lenoxy"
+        description: "The users unique username"
+      password:
+        type: "string"
+        example: "Sugondisnuts"
+        description: "The password from the user, used for authentication"
+      moneyInStocks:
+        type: "number"
+        example: "6045.67"
+        description: "Total value of stocks from user, add to moneyLiquid to get Score"
+      moneyLiquid:
+        type: "number"
+        example: "1045.344"
+        description: "Value uf money balance from user, add to moneyInStocks to get Score"
+      stocksValueHistory:
+        type: "array"
+        items:
+          type: "number"
+        example: [5249.2, 5590.22, 7235.00]
+        description: "The History of the value invested in stocks"
+      moneyLiquidHistory:
+        type: "array"
+        items:
+          type: "number"
+        example: [5249.2, 5590.22, 7235.00]
+        description: "The History of the bank balance of the user"
