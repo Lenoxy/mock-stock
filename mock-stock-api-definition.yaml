@@ -15,7 +15,44 @@ tags:
   description: "The other users for scoreboard n stuff"
 - name: "auth"
   description: "For all your authentication needs"
+  
+securityDefinitions:
+  cookieAuth:
+    type: apiKey
+    in: header
+    name: Set-Cookie
+    description: Cookie Header für so zeugs
+  
 paths:
+  /stocks:
+    get:
+      tags:
+      - "stocks"
+      summary: "Get the values of provided stock"
+      description: "Gets the stock values from the real market."
+      operationId: "getAllStock"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "top"
+        description: "Gets only the top so much stocks"
+        required: true
+        type: "integer"
+      - in: "query"
+        name: "skip"
+        description: "Skips an amount of stocks and then returns the amount of stocks defined in top"
+        required: false
+        type: "integer"
+      responses:
+        "200":
+          description: "Stock found"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Stock"
+        "404":
+          description: "Stock not found"
   /stocks/{stock}:
     get:
       tags:
@@ -61,6 +98,8 @@ paths:
         required: true
         schema:
           type: "integer"
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: "Bought stock"
@@ -94,7 +133,9 @@ paths:
         description: "Amount of stocks to sell"
         required: true
         schema:
-          type: "number"
+          type: "integer"
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: "Sold stock"
@@ -116,6 +157,8 @@ paths:
       produces:
       - "application/json"
       parameters: []
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: "successful operation"
@@ -138,6 +181,8 @@ paths:
         description: "The Cookie to identify / authenticate the user"
         required: true
         type: "string"
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: "successful operation"
@@ -161,7 +206,7 @@ paths:
         name: "top"
         description: "Gets only the top so much users for the leaderboard. If omited, returns all users"
         required: false
-        type: "number"
+        type: "integer"
       responses:
         "200":
           description: "successful operation"
@@ -215,39 +260,25 @@ paths:
         default:
           description: "successful operation"
   /auth/login:
-    get:
-      tags:
-      - "auth"
-      summary: "Logs user into the system"
-      description: ""
-      operationId: "loginUser"
-      produces:
-      - "application/json"
+    post:
+      summary: Logs in and returns the authentication  cookie
       parameters:
-      - name: "Authorization"
-        in: "header"
-        description: "The Username:Password in base64 encoded"
+      - in: "body"
+        name: "body"
+        description: "Login request"
         required: true
-        type: "string"
+        schema:
+          $ref: '#/definitions/LoginRequest'
+      security: []    # no authentication
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "string"
-          headers:
-            X-Rate-Limit:
-              type: "integer"
-              format: "int32"
-              description: "calls per hour allowed by the user"
-            X-Expires-After:
-              type: "string"
-              format: "date-time"
-              description: "date in UTC when token expires"
-            Cookie:
-              type: "string"
-              description: "The session cookie (JWT)"
-        "400":
-          description: "Invalid username/password supplied"
+        '200':
+          description: >
+            Successfully authenticated.
+            The session ID is returned in a cookie named `JSESSIONID`. You need to include this cookie in subsequent requests.
+          headers: 
+            Set-Cookie:
+              type: string
+              description: JSESSIONID=abcde12345; Path=/; HttpOnly
   /auth/logout:
     get:
       tags:
@@ -319,3 +350,14 @@ definitions:
           type: "number"
         example: [5249.2, 5590.22, 7235.00]
         description: "The History of the bank balance of the user"
+  LoginRequest:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        example: "Lenoxy"
+        description: "The users unique username"
+      password:
+        type: "string"
+        example: "Sugondisnuts"
+        description: "The password from the user, used for authentication"
