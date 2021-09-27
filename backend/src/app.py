@@ -19,6 +19,10 @@ def create_app():
 
     from controller.users import users as users_blueprint
     app.register_blueprint(users_blueprint)
+
+    # Endpoint for swagger dok
+    from controller.swagger import swagger as swagger_blueprint
+    app.register_blueprint(swagger_blueprint)
     
     return app
 
