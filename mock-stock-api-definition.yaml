@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is an API for a stock-market simulation game. Let users bet with fake money on real market values. Find the code in our [GitHub Repo](https://github.com/the-philip-baumann/mock-stock)"
-  version: "0.1.0"
+  version: "0.2"
   title: "Mock-Stock"
   license:
     name: "Apache 2.0"
@@ -28,7 +28,7 @@ paths:
     get:
       tags:
       - "stocks"
-      summary: "Get the values of provided stock"
+      summary: "Gets list of stocks"
       description: "Gets the stock values from the real market."
       operationId: "getAllStock"
       produces:
@@ -46,13 +46,13 @@ paths:
         type: "integer"
       responses:
         "200":
-          description: "Stock found"
+          description: "Stocks found"
           schema:
             type: "array"
             items:
               $ref: "#/definitions/Stock"
         "404":
-          description: "Stock not found"
+          description: "No stonks today"
   /stocks/{stock}:
     get:
       tags:
@@ -261,6 +261,8 @@ paths:
           description: "successful operation"
   /auth/login:
     post:
+      tags:
+      - "auth"
       summary: Logs in and returns the authentication  cookie
       parameters:
       - in: "body"
@@ -340,7 +342,7 @@ definitions:
         type: "number"
         example: "1045.344"
         description: "Value uf money balance from user, add to moneyInStocks to get Score"
-      stocksValueHistory:
+      moneyInStocksHistory:
         type: "array"
         items:
           type: "number"
