@@ -15,14 +15,14 @@ tags:
   description: "The other users for scoreboard n stuff"
 - name: "auth"
   description: "For all your authentication needs"
-  
+
 securityDefinitions:
   cookieAuth:
     type: apiKey
     in: header
     name: Set-Cookie
     description: Cookie Header für so zeugs
-  
+
 paths:
   /stocks:
     get:
@@ -255,7 +255,7 @@ paths:
         description: "User to create, only password and username required"
         required: true
         schema:
-          $ref: "#/definitions/User"
+          $ref: "#/definitions/LoginRequest"
       responses:
         default:
           description: "successful operation"
@@ -275,7 +275,7 @@ paths:
           description: >
             Successfully authenticated.
             The session ID is returned in a cookie named `JSESSIONID`. You need to include this cookie in subsequent requests.
-          headers: 
+          headers:
             Set-Cookie:
               type: string
               description: JSESSIONID=abcde12345; Path=/; HttpOnly
@@ -289,6 +289,8 @@ paths:
       produces:
       - "application/json"
       parameters: []
+      security:
+        - cookieAuth: []
       responses:
         default:
           description: "successful operation"
