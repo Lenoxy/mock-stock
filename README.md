@@ -10,3 +10,6 @@ Python3 and pip3 are required.
 
 ## Run backend in docker
 1. Run `docker-compose up` in root
+
+## Backend OpenAPI
+Running on [localhost:5000/apidocs/?url=/swagger](localhost:5000/apidocs/?url=/swagger)

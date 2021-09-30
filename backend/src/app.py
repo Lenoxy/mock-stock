@@ -1,12 +1,12 @@
+from flasgger import Swagger
 from flask import Flask
+
 
 # init SQLAlchemy so we can use it later in our models
 def create_app():
     app = Flask(__name__)
-
-    app.config['SECRET_KEY'] = 'secret-key-goes-here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-
+    swagger = Swagger(app)
+    swagger.load_swagger_file('openapi.yaml')
     # Add Endpoints / Resources from Controller to app
     from controller.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
@@ -23,7 +23,7 @@ def create_app():
     # Endpoint for swagger dok
     from controller.swagger import swagger as swagger_blueprint
     app.register_blueprint(swagger_blueprint)
-    
+
     return app
 
 
