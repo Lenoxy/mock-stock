@@ -19,4 +19,4 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: cd /root/mock-stock && ./root/git/mock-stock/infrastructure/deployment.sh
+        script: ./root/git/mock-stock/infrastructure/deployment.sh
