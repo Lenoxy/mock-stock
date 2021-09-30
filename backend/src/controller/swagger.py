@@ -4,4 +4,4 @@ swagger = Blueprint('swagger', __name__)
 
 @swagger.route("/swagger")
 def get_swagger():
-    return send_file('./mock-stock-api-definition.yaml')
+    return send_file('./openapi.yaml')
