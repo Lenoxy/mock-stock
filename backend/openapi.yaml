@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "This is an API for a stock-market simulation game. Let users bet with fake money on real market values. Find the code in our [GitHub Repo](https://github.com/the-philip-baumann/mock-stock)"
-  version: "0.1.0"
+  version: "1.0"
   title: "Mock-Stock"
   license:
     name: "Apache 2.0"
@@ -15,7 +15,44 @@ tags:
   description: "The other users for scoreboard n stuff"
 - name: "auth"
   description: "For all your authentication needs"
+
+securityDefinitions:
+  cookieAuth:
+    type: apiKey
+    in: header
+    name: Set-Cookie
+    description: Session Cookies etc.
+
 paths:
+  /stocks:
+    get:
+      tags:
+      - "stocks"
+      summary: "Gets list of stocks"
+      description: "Gets the stock values from the real market."
+      operationId: "getAllStock"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "top"
+        description: "Gets only the top so much stocks"
+        required: true
+        type: "integer"
+      - in: "query"
+        name: "skip"
+        description: "Skips an amount of stocks and then returns the amount of stocks defined in top"
+        required: false
+        type: "integer"
+      responses:
+        "200":
+          description: "Stocks found"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SimpleStock"
+        "404":
+          description: "No stonks today"
   /stocks/{stock}:
     get:
       tags:
@@ -61,6 +98,8 @@ paths:
         required: true
         schema:
           type: "integer"
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: "Bought stock"
@@ -94,7 +133,9 @@ paths:
         description: "Amount of stocks to sell"
         required: true
         schema:
-          type: "number"
+          type: "integer"
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: "Sold stock"
@@ -116,6 +157,8 @@ paths:
       produces:
       - "application/json"
       parameters: []
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: "successful operation"
@@ -138,6 +181,8 @@ paths:
         description: "The Cookie to identify / authenticate the user"
         required: true
         type: "string"
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: "successful operation"
@@ -161,14 +206,14 @@ paths:
         name: "top"
         description: "Gets only the top so much users for the leaderboard. If omited, returns all users"
         required: false
-        type: "number"
+        type: "integer"
       responses:
         "200":
           description: "successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/User"
+              $ref: "#/definitions/SimpleUser"
         "400":
           description: "Couldn't get the users"
   /users/{username}/stocks:
@@ -210,44 +255,32 @@ paths:
         description: "User to create, only password and username required"
         required: true
         schema:
-          $ref: "#/definitions/User"
+          $ref: "#/definitions/AuthRequest"
       responses:
         default:
           description: "successful operation"
   /auth/login:
-    get:
+    post:
       tags:
       - "auth"
-      summary: "Logs user into the system"
-      description: ""
-      operationId: "loginUser"
-      produces:
-      - "application/json"
+      summary: Logs in and returns the authentication  cookie
       parameters:
-      - name: "Authorization"
-        in: "header"
-        description: "The Username:Password in base64 encoded"
+      - in: "body"
+        name: "body"
+        description: "Login request"
         required: true
-        type: "string"
+        schema:
+          $ref: '#/definitions/AuthRequest'
+      security: []    # no authentication
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "string"
+        '200':
+          description: >
+            Successfully authenticated.
+            Authentication Cookies are set.
           headers:
-            X-Rate-Limit:
-              type: "integer"
-              format: "int32"
-              description: "calls per hour allowed by the user"
-            X-Expires-After:
-              type: "string"
-              format: "date-time"
-              description: "date in UTC when token expires"
-            Cookie:
-              type: "string"
-              description: "The session cookie (JWT)"
-        "400":
-          description: "Invalid username/password supplied"
+            Set-Cookie:
+              type: string
+              description: JSESSIONID=abcde12345; Path=/; HttpOnly
   /auth/logout:
     get:
       tags:
@@ -258,6 +291,8 @@ paths:
       produces:
       - "application/json"
       parameters: []
+      security:
+        - cookieAuth: []
       responses:
         default:
           description: "successful operation"
@@ -287,8 +322,76 @@ definitions:
         items:
           type: "number"
         example: [170.2, 120.22, 140.00]
-        description: "The History of the score"
+        description: "The History of the score. Duration over 5 days with 1 hour intervals, first value is newest."
+  SimpleStock:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        example: "AAPL"
+        description: "ID of stock"
+      value:
+        type: "number"
+        example: 155.3456
+        description: "Value of stock in USD"
+      name:
+        type: "string"
+        example: "Apple Inc."
+        description: "The Name of the Company"
+      amount:
+        type: "integer"
+        format: "int64"
+        example: 3
+        description: "The amount of this stock someone holds."
+      change:
+        type: "number"
+        example: 2.93
+        description: "How much the stock changed over the last hour"
+    description: "Stock Dto with less overhead for List views."
   User:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        example: "Lenoxy"
+        description: "The users unique username"
+      moneyInStocks:
+        type: "number"
+        example: "6045.67"
+        description: "Total value of stocks from user, add to moneyLiquid to get Score"
+      moneyLiquid:
+        type: "number"
+        example: "1045.344"
+        description: "Value uf money balance from user, add to moneyInStocks to get Score"
+      moneyInStocksHistory:
+        type: "array"
+        items:
+          type: "number"
+        example: [5249.2, 5590.22, 7235.00]
+        description: "The History of the value invested in stocks by the user. Duration over 5 days with 1 hour intervals, first value is newest."
+      moneyLiquidHistory:
+        type: "array"
+        items:
+          type: "number"
+        example: [5249.2, 5590.22, 7235.00]
+        description: "The History of the bank balance of the user. Duration over 5 days with 1 hour intervals, first value is newest."
+  SimpleUser:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+        example: "Lenoxy"
+        description: "The users unique username"
+      moneyInStocks:
+        type: "number"
+        example: "6045.67"
+        description: "Total value of stocks from user, add to moneyLiquid to get Score"
+      moneyLiquid:
+        type: "number"
+        example: "1045.344"
+        description: "Value uf money balance from user, add to moneyInStocks to get Score"
+    description: "User Dto with less overhead for List views."
+  AuthRequest:
     type: "object"
     properties:
       username:
@@ -299,23 +402,3 @@ definitions:
         type: "string"
         example: "Sugondisnuts"
         description: "The password from the user, used for authentication"
-      moneyInStocks:
-        type: "number"
-        example: "6045.67"
-        description: "Total value of stocks from user, add to moneyLiquid to get Score"
-      moneyLiquid:
-        type: "number"
-        example: "1045.344"
-        description: "Value uf money balance from user, add to moneyInStocks to get Score"
-      stocksValueHistory:
-        type: "array"
-        items:
-          type: "number"
-        example: [5249.2, 5590.22, 7235.00]
-        description: "The History of the value invested in stocks"
-      moneyLiquidHistory:
-        type: "array"
-        items:
-          type: "number"
-        example: [5249.2, 5590.22, 7235.00]
-        description: "The History of the bank balance of the user"
