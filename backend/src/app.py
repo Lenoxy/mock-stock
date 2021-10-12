@@ -1,11 +1,15 @@
 from flasgger import Swagger
 from flask import Flask
-
+from flask_login import LoginManager
+import db
 
 def create_app():
     app = Flask(__name__)
+
     swagger = Swagger(app)
     swagger.load_swagger_file('openapi.yaml')
+
+    add_flask_login(app)
     
     # Add Endpoints / Resources from Controller to app
     from controller.auth import auth as auth_blueprint
@@ -25,6 +29,21 @@ def create_app():
     app.register_blueprint(swagger_blueprint)
 
     return app
+
+
+def add_flask_login(app):
+    app.secret_key = 'super secret string'
+
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def user_loader(username):
+        return db.get_user(username)
+
+    @login_manager.unauthorized_handler
+    def unauthorized_handler():
+        return 'Unauthorized', 401
 
 
 if __name__ == '__main__':

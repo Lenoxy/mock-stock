@@ -1,6 +1,8 @@
-class User():
-    def __init__(self, user):
-        if user['username'] and user['password_hash'] and user['money_liquid']:
+from flask_login import UserMixin
+
+class User(UserMixin):
+    def __init__(self, user=None):
+        if user and user['username'] and user['password_hash'] and user['money_liquid']:
             self.username = user['username']
             self.password_hash = user['password_hash']
             self.money_liquid = user['money_liquid']

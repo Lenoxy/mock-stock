@@ -1,13 +1,11 @@
 from os import error
-from model.User import User
-from model.Transaction import Transaction
-from model.OwnedStock import OwnedStock
+from models import User, OwnedStock, Transaction
 from datetime import date, timedelta
 
 db = {}
 db['users'] = {'lenoxy': User({
     'username': 'lenoxy',
-    'password_hash': 'password1234',
+    'password_hash': 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db',
     'money_liquid': 3123.23
 })}
 db['transactions'] = []
@@ -36,7 +34,7 @@ def create_user(user: User) -> User:
     if not user.username in users:
         users[user.username] = user
         return user
-    raise Exception('User could not be created')
+    raise Exception(f'User {user.username} already exists')
 
 # Transactions
 def get_transactions(username: str) -> list[Transaction]:
@@ -47,8 +45,9 @@ def get_transactions(username: str) -> list[Transaction]:
 
     raise Exception('User does not exist')
 
-def create_transacition(transaction: Transaction):
+def create_transacition(transaction: Transaction) -> Transaction:
     db['transactions'].push(transaction)
+    return transaction
 
 # Owned Stocks
 def get_owned_stocks(username: str) -> dict[OwnedStock]:
@@ -60,3 +59,4 @@ def update_owned_stocks(owned_stock: OwnedStock) -> list[OwnedStock]:
         db['owned_stocks'][owned_stock.username] = {}
 
     db['owned_stocks'][owned_stock.username][owned_stock.id].amount = owned_stock.amount
+    return db['owned_stocks'][owned_stock.username]

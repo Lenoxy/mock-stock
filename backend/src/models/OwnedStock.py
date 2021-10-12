@@ -2,7 +2,7 @@ from os import O_NDELAY
 
 
 class OwnedStock():
-    def __init__(self, owned_stock):
+    def __init__(self, owned_stock=None):
         if owned_stock['username'] and owned_stock['id'] and owned_stock['amount']:
             self.username = owned_stock['username']
             self.id = owned_stock['id']

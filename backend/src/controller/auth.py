@@ -1,22 +1,51 @@
-from flask import Blueprint
+from flask import Blueprint, request
+from flask_login import login_user, logout_user, login_required, current_user
+import db
+from hashlib import sha512
+from models import User
 
 auth = Blueprint('auth', __name__)
 
 @auth.route("/auth/register", methods=['POST'])
 def register_user():
-    andsomedbcalls = "not implemented as well"
+    auth_request = request.json
 
-    return f'Should create User. Not yet implemented, do it bitch!'
+    username = auth_request.get('username')
+    password = auth_request.get('password') 
+
+    try:
+        user = User()
+        user.username = username
+        user.password_hash = sha512(password.encode('utf-8')).hexdigest()
+        user.money_liquid = 5000.0
+        user = db.create_user(user)
+        login_user(user)
+
+        return user.to_json()
+
+    except Exception as e:
+        return str(e), 400
+
 
 @auth.route("/auth/login", methods=['POST'])
-def login_user(loginRequest):
-    andsomedbcalls = "not implemented as well"
+def post_login():
+    auth_request = request.json
 
-    return f'Should return a cookie. You dont get any cookies because noone implemented this!'
+    username = auth_request.get('username')
+    password_hash = sha512(auth_request.get('password').encode('utf-8')).hexdigest()
+
+    try:
+        user = db.get_user(username)
+        if user.password_hash == password_hash:
+            login_user(user)
+            return user.to_json()
+        return f'Wrong password dude', 401
+    except Exception as e:
+        return str(e), 400
+
 
 @auth.route("/auth/logout")
-# @login_required
-def logout_user():
-    andsomedbcalls = "not implemented as well"
-
-    return f'Why tho, coulnt we just delete the cookie in the frontend?'
+@login_required
+def get_logout():
+    logout_user()
+    return 'Succesfully logged out', 200
