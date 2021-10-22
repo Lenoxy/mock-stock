@@ -1,7 +1,7 @@
 #!/bin/bash
 echo Deployment Script
 
-cd /root/git/mock-stock || exit
+cd /home/mock-stock/mock-stock || exit
 
 # pull release
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
