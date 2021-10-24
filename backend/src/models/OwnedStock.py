@@ -1,5 +1,3 @@
-from os import O_NDELAY
-
 
 class OwnedStock():
     def __init__(self, owned_stock=None):
