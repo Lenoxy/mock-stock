@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 import yfinance as yf
+import finance
 
 from backend.src.models.StockDetails import StockDetails
 
@@ -13,9 +14,11 @@ def hello():
 
 @stocks.route("/stocks/<string:id>")
 def get_stock(id):
-    stock = yf.Ticker(id)
+    try:
+        return finance.get_stock_with_history(id).to_json()
+    except Exception as e:
+        return str(e), 400
 
-    return str(stock.history().tail(1)['Close'].iloc[0])
 
 
 @stocks.route("/stocks/<string:id>/buy", methods=['PUT'])

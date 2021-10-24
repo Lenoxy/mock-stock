@@ -1,6 +1,6 @@
 class Transaction():
     def __init__(self, transaction=None):
-        if transaction['id'] and transaction['username'] and transaction['date'] and transaction['stock_id'] and transaction['amount']:
+        if transaction and transaction['id'] and transaction['username'] and transaction['date'] and transaction['stock_id'] and transaction['amount']:
             self.id = transaction['id']
             self.username = transaction['username']
             self.date = transaction['date']
