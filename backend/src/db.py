@@ -70,6 +70,6 @@ def update_owned_stocks(owned_stock: OwnedStock) -> list[OwnedStock]:
         db['owned_stocks'][owned_stock.username][owned_stock.id] = OwnedStock(
             {'id': owned_stock.id, 'username': owned_stock.username, 'amount': owned_stock.amount})
     else:
-        db['owned_stocks'][owned_stock.username][owned_stock.id].amount = owned_stock.amount
+        db['owned_stocks'][owned_stock.username][owned_stock.id].amount += owned_stock.amount
 
     return db['owned_stocks'][owned_stock.username]
