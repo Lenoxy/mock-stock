@@ -68,8 +68,10 @@ def update_owned_stocks(owned_stock: OwnedStock) -> list[OwnedStock]:
 
     if not owned_stock.id in db['owned_stocks'][owned_stock.username]:
         db['owned_stocks'][owned_stock.username][owned_stock.id] = OwnedStock(
-            {'id': owned_stock.id, 'username': owned_stock.username, 'amount': owned_stock.amount})
-    else:
-        db['owned_stocks'][owned_stock.username][owned_stock.id].amount += owned_stock.amount
+            {'id': owned_stock.id, 'username': owned_stock.username, 'amount': 0})
+
+    if db['owned_stocks'][owned_stock.username][owned_stock.id].amount + owned_stock.amount < 0:
+        raise Exception("Amount may not be negative")
+    db['owned_stocks'][owned_stock.username][owned_stock.id].amount += owned_stock.amount
 
     return db['owned_stocks'][owned_stock.username]

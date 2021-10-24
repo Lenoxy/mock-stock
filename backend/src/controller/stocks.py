@@ -26,18 +26,17 @@ def get_stock(id):
 # @login_required
 def buy_stock(id):
     amount = request.json['amount']
-    stock = yf.Ticker(id)
 
     db.update_owned_stocks(OwnedStock({'username': flask_login.current_user.username,'id': id, 'amount': amount }))
 
     return db.get_owned_stocks(flask_login.current_user.username)[id].to_json()
 
-    return f'Should buy {id}. Not yet implemented, do it bitch!'
-
 
 @stocks.route("/stocks/<string:id>/sell", methods=['PUT'])
 # @login_required
 def sell_stock(id):
-    stock = yf.Ticker(id)
+    amount = -(request.json['amount'])
 
-    return f'Should sell {id}. Not yet implemented, do it bitch!'
+    db.update_owned_stocks(OwnedStock({'username': flask_login.current_user.username,'id': id, 'amount': amount }))
+
+    return db.get_owned_stocks(flask_login.current_user.username)[id].to_json()
