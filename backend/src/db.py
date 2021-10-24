@@ -1,6 +1,6 @@
-from os import error
-from models import User, OwnedStock, Transaction
 from datetime import date, timedelta
+
+from models import User, OwnedStock, Transaction
 
 db = {}
 db['users'] = {'lenoxy': User({
@@ -11,16 +11,19 @@ db['users'] = {'lenoxy': User({
 db['transactions'] = []
 db['owned_stocks'] = {}
 
+
 # Users
 def get_user(username: str) -> User:
     users = db['users']
     if username in users:
         return users[username]
-    
+
     raise Exception('Could not find user')
+
 
 def get_users() -> list[User]:
     return db['users'].values()
+
 
 def update_user(user: User) -> User:
     users = db['users']
@@ -29,12 +32,14 @@ def update_user(user: User) -> User:
         return users[user.username]
     raise Exception('User could not be updated')
 
+
 def create_user(user: User) -> User:
     users = db['users']
     if not user.username in users:
         users[user.username] = user
         return user
     raise Exception(f'User {user.username} already exists')
+
 
 # Transactions
 def get_transactions(username: str) -> list[Transaction]:
@@ -45,18 +50,26 @@ def get_transactions(username: str) -> list[Transaction]:
 
     raise Exception('User does not exist')
 
+
 def create_transacition(transaction: Transaction) -> Transaction:
     db['transactions'].push(transaction)
     return transaction
+
 
 # Owned Stocks
 def get_owned_stocks(username: str) -> dict[OwnedStock]:
     if username in db['owned_stocks']:
         return db['owned_stocks'][username]
 
+
 def update_owned_stocks(owned_stock: OwnedStock) -> list[OwnedStock]:
     if not owned_stock.username in db['owned_stocks']:
         db['owned_stocks'][owned_stock.username] = {}
 
-    db['owned_stocks'][owned_stock.username][owned_stock.id].amount = owned_stock.amount
+    if not owned_stock.id in db['owned_stocks'][owned_stock.username]:
+        db['owned_stocks'][owned_stock.username][owned_stock.id] = OwnedStock(
+            {'id': owned_stock.id, 'username': owned_stock.username, 'amount': owned_stock.amount})
+    else:
+        db['owned_stocks'][owned_stock.username][owned_stock.id].amount = owned_stock.amount
+
     return db['owned_stocks'][owned_stock.username]

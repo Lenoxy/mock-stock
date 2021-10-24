@@ -1,14 +1,15 @@
+import flask_login
 from flask import Blueprint, request, jsonify
 import yfinance as yf
 import finance
-
-from backend.src.models.StockDetails import StockDetails
+import db
+from models import OwnedStock
 
 stocks = Blueprint('stocks', __name__)
 
 
 @stocks.route("/stocks")
-def hello():
+def get_stocks():
     return 'AAPL GOOG etc...'
 
 
@@ -24,12 +25,12 @@ def get_stock(id):
 @stocks.route("/stocks/<string:id>/buy", methods=['PUT'])
 # @login_required
 def buy_stock(id):
-    amount = request.data
+    amount = request.json['amount']
     stock = yf.Ticker(id)
 
-    # db.update_owned_stocks()
+    db.update_owned_stocks(OwnedStock({'username': flask_login.current_user.username,'id': id, 'amount': amount }))
 
-    return jsonify(StockDetails.from_ticker(stock, amount))
+    return db.get_owned_stocks(flask_login.current_user.username)[id].to_json()
 
     return f'Should buy {id}. Not yet implemented, do it bitch!'
 
