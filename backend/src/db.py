@@ -1,4 +1,3 @@
-from os import error
 from models import User, OwnedStock, Transaction
 from datetime import date, timedelta
 import mongodb

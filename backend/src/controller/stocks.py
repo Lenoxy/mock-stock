@@ -14,7 +14,7 @@ def get_stocks():
     return 'AAPL GOOG etc...'
 
 
-@stocks.route("/stocks/<string:id>")
+@stocks.route("/stocks/<string:id>", methods=['GET'])
 def get_stock(id):
     try:
         stock = finance.get_stock_with_history(id)
@@ -26,8 +26,7 @@ def get_stock(id):
         return stock.to_json()
 
     except Exception as e:
-        # return str(e), 400
-        raise
+        return str(e), 400
 
 
 @stocks.route("/stocks/<string:id>/buy", methods=['PUT'])

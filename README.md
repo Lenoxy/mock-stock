@@ -12,4 +12,4 @@ Python3 and pip3 are required.
 1. Run `docker-compose up` in root
 
 ## Backend OpenAPI
-Running on [localhost:5000/apidocs/?url=/swagger](localhost:5000/apidocs/?url=/swagger)
+Running on [localhost:5000/apidocs/?url=/swagger](http://localhost:5000/apidocs/?url=/swagger)
