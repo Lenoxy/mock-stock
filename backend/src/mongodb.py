@@ -1,12 +1,12 @@
-from pymongo.mongo_client import MongoClient
+from pymongo.database import Database
 
-def get_new_db_connection() -> MongoClient:
+def get_mongo_database() -> Database:
     CONNECTION_STRING = "mongodb://root:9876512345@localhost:27017"
     from pymongo import MongoClient
     client = MongoClient(CONNECTION_STRING)
-    return client
+    return client.mockstock
 
 
 if __name__ == "__main__":
-    dbname = get_new_db_connection()
+    dbname = get_mongo_database()
     print('Connected to DB:', dbname.name)

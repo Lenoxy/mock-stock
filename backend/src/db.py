@@ -1,7 +1,7 @@
+from os import error
+from models import User, OwnedStock, Transaction
 from datetime import date, timedelta
 import mongodb
-
-from models import User, OwnedStock, Transaction
 
 db = {}
 db['users'] = {'lenoxy': User({
@@ -12,41 +12,40 @@ db['users'] = {'lenoxy': User({
 db['transactions'] = []
 db['owned_stocks'] = {}
 
-
 # Users
 def get_user(username: str) -> User:
-    users = db['users']
-    if username in users:
-        return users[username]
+    filter = { "username": username }
 
+    collection = mongodb.get_mongo_database().user
+    user = collection.find_one(filter)
+    if user:
+        print(str(user))
+        return User(user)
     raise Exception('Could not find user')
 
-
 def get_users() -> list[User]:
-    db = mongodb.get_new_db_connection()
-    collection = db["mockstock"]
+    collection = mongodb.get_mongo_database().user
     cursor = collection.find({})
+    users = []
     for user in cursor:
-        print(user.username)
+        users.append(User(user))
+        print(user['username'])
 
+    return users
 
-    return db['users'].values()
+def update_money_liquid(user: User) -> User:
+    filter = { "username": user.username }
+    collection = mongodb.get_mongo_database().user
 
-
-def update_user(user: User) -> User:
-    users = db['users']
-    if user.username in users:
-        users[user.username].money_liquid = user.money_liquid
-        return users[user.username]
+    if user:
+        collection.update_one(filter, { "$set": { 'money_liquid': user.money_liquid } })
+        return collection.find_one(filter)
     raise Exception('User could not be updated')
 
-
 def create_user(user: User) -> User:
-    db = mongodb.get_new_db_connection().mockstock
-    collection = db.user
+    collection = mongodb.get_mongo_database().user
     collection.insert_one({"username": user.username, "password_hash": user.password_hash, "money_liquid": user.money_liquid})
     return user
-
 
 # Transactions
 def get_transactions(username: str) -> list[Transaction]:
@@ -57,11 +56,9 @@ def get_transactions(username: str) -> list[Transaction]:
 
     raise Exception('User does not exist')
 
-
-def create_transacition(transaction: Transaction) -> Transaction:
+def create_transaction(transaction: Transaction) -> Transaction:
     db['transactions'].push(transaction)
     return transaction
-
 
 # Owned Stocks
 def get_owned_stocks(username: str) -> dict[OwnedStock]:
@@ -71,9 +68,6 @@ def get_owned_stocks(username: str) -> dict[OwnedStock]:
     return db['owned_stocks'][username]
 
 def update_owned_stocks(owned_stock: OwnedStock) -> list[OwnedStock]:
-    if not owned_stock.username in db['owned_stocks']:
-        db['owned_stocks'][owned_stock.username] = {}
-
     if not owned_stock.id in db['owned_stocks'][owned_stock.username]:
         db['owned_stocks'][owned_stock.username][owned_stock.id] = OwnedStock(
             {'id': owned_stock.id, 'username': owned_stock.username, 'amount': 0})
