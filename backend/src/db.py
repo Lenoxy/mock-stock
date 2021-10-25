@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+import mongodb
 
 from models import User, OwnedStock, Transaction
 
@@ -22,6 +23,13 @@ def get_user(username: str) -> User:
 
 
 def get_users() -> list[User]:
+    db = mongodb.get_new_db_connection()
+    collection = db["mockstock"]
+    cursor = collection.find({})
+    for user in cursor:
+        print(user.username)
+
+
     return db['users'].values()
 
 
@@ -34,11 +42,10 @@ def update_user(user: User) -> User:
 
 
 def create_user(user: User) -> User:
-    users = db['users']
-    if not user.username in users:
-        users[user.username] = user
-        return user
-    raise Exception(f'User {user.username} already exists')
+    db = mongodb.get_new_db_connection().mockstock
+    collection = db.user
+    collection.insert_one({"username": user.username, "password_hash": user.password_hash, "money_liquid": user.money_liquid})
+    return user
 
 
 # Transactions

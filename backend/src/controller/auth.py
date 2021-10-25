@@ -24,6 +24,7 @@ def register_user():
         return user.to_json()
 
     except Exception as e:
+        print(e)
         return str(e), 400
 
 

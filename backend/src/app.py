@@ -2,6 +2,7 @@ from flasgger import Swagger
 from flask import Flask
 from flask_login import LoginManager
 import db
+import mongodb
 
 def create_app():
     app = Flask(__name__)
