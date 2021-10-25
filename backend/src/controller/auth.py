@@ -17,7 +17,7 @@ def register_user():
         user = User()
         user.username = username
         user.password_hash = sha512(password.encode('utf-8')).hexdigest()
-        user.money_liquid = 5000.0
+        user.money_liquid = 20000.0
         user = db.create_user(user)
         login_user(user)
 
