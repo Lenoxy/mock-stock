@@ -1,5 +1,6 @@
 from models import User, OwnedStock, Transaction
 from datetime import date, timedelta
+import csv
 import mongodb
 
 db = {}
@@ -76,3 +77,11 @@ def update_owned_stocks(owned_stock: OwnedStock) -> list[OwnedStock]:
     db['owned_stocks'][owned_stock.username][owned_stock.id].amount += owned_stock.amount
 
     return db['owned_stocks'][owned_stock.username]
+
+
+# Stock IDs
+def get_stock_ids() -> list[str]:
+    with open('src/resources/tickers.csv', newline='') as tickers:
+        reader = csv.reader(tickers)
+        for s in list(reader):
+           yield s[0]

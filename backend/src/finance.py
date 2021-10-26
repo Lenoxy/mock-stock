@@ -17,7 +17,7 @@ def get_stock(stock_id: str) -> Stock:
 
         return stock
     except:
-        raise Exception("Sorry dude, couldn't get you that stock")
+        raise Exception(f"Sorry dude, couldn't get you the stock {stock_id}")
 
 
 def get_stock_with_history(stock_id: str) -> Stock:

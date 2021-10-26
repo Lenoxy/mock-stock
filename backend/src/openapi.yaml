@@ -75,12 +75,11 @@ paths:
             $ref: "#/definitions/Stock"
         "404":
           description: "Stock not found"
-  /stocks/{stock}/buy:
     put:
       tags:
       - "stocks"
-      summary: "Buy stocks"
-      description: "Buy an amount of Stocks"
+      summary: "Buy or sell stocks"
+      description: "Buy or sell an amount of Stocks"
       operationId: "buyStock"
       consumes:
       - "application/json"
@@ -94,7 +93,7 @@ paths:
         type: "string"
       - in: "body"
         name: "amount"
-        description: "Amount of stocks to buy"
+        description: "Amount to sell if negativ, amount to buy if positiv"
         required: true
         schema:
           type: "integer"
@@ -102,7 +101,7 @@ paths:
         - cookieAuth: []
       responses:
         "200":
-          description: "Bought stock"
+          description: "Bought or sold stock"
           schema:
             $ref: "#/definitions/Stock"
         "403":
@@ -111,42 +110,6 @@ paths:
           description: "Stock not found"
         "405":
           description: "Too poor to buy those stocks *sad face*"
-  /stocks/{stock}/sell:
-    put:
-      tags:
-      - "stocks"
-      summary: "Sell stocks"
-      description: "Sell an amount of stocks"
-      operationId: "sellStock"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "path"
-        name: "stock"
-        description: "Stock to buy"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "amount"
-        description: "Amount of stocks to sell"
-        required: true
-        schema:
-          type: "integer"
-      security:
-        - cookieAuth: []
-      responses:
-        "200":
-          description: "Sold stock"
-          schema:
-            $ref: "#/definitions/Stock"
-        "403":
-          description: "Not logged in"
-        "404":
-          description: "Stock not found"
-        "405":
-          description: "You don't have those stocks, lol"
   /me:
     get:
       tags:
