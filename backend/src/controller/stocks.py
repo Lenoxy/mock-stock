@@ -49,7 +49,7 @@ def get_stocks():
 def get_stock(id):
     try:
         stock = finance.get_stock_with_history(id)
-        if not current_user is AnonymousUserMixin:
+        if current_user.is_authenticated:
             owned_stocks = db.get_owned_stocks(current_user.username)
             if id in owned_stocks:
                 stock.amount = owned_stocks[id].amount
@@ -57,6 +57,7 @@ def get_stock(id):
         return stock.to_json()
 
     except Exception as e:
+        raise
         return str(e), 400
 
 
