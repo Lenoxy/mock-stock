@@ -16,7 +16,7 @@ git reset --hard
 
 git pull origin master
 
-docker-compose --env-file ./../docker-compose.env down
+docker-compose --env-file docker-compose.env down
 
 cd ./backend
 pip install -r requirements.txt
