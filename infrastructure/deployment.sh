@@ -14,11 +14,13 @@ fi
 # clear any changes (possibly package-lock.json)
 git reset --hard
 
-git pull origin master
+
 
 $VERSION=$(grep "VERSION=" docker-compose.env | cut -d '=' -f 2)
 
 echo "$VERSION"
+
+git pull origin master
 
 docker-compose down
 
