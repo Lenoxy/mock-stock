@@ -16,7 +16,7 @@ git reset --hard
 
 git pull origin master
 
-docker-compose --env-file ./docker-compose.env down
+docker-compose down
 
 cd ./backend
 pip install -r requirements.txt
@@ -27,4 +27,4 @@ npm install
 npm run build
 cd ..
 
-docker-compose up -d --force-recreate --build
+docker-compose up -d --force-recreate --build --env-file ./docker-compose.env
