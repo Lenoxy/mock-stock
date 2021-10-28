@@ -1,18 +1,30 @@
 from pandas._libs.tslibs.timestamps import Timestamp
 from models import Transaction, Stock
 import yfinance as yf
+from datetime import datetime, timedelta
+
+
+tickers = {}
+
 
 def get_stock(stock_id: str) -> Stock:
     try:
-        ticker = yf.Ticker(stock_id)
+        ticker = {}
+        if stock_id in tickers:
+            ticker = tickers[stock_id]
+        else:
+            tickers[stock_id] = yf.Ticker(stock_id)
+            ticker = tickers[stock_id]
         stock = Stock()
 
         stock.id = stock_id
-        stock.value = ticker.history().tail(1)['Close'].iloc[0]
+        history_for_value = ticker.history(period='2d', interval='1d')
+        stock.value = history_for_value.tail(1)['Close'].iloc[0]
         stock.name = ticker.info['longName']
 
-        before = ticker.history(period='2d', interval='1d').tail(2)['Close'].iloc[0]
-        now = ticker.history(period='2d', interval='1d').tail(1)['Close'].iloc[0]
+        change_values = ticker.history(period='2d', interval='1d')
+        before = change_values.tail(2)['Close'].iloc[0]
+        now = change_values.tail(1)['Close'].iloc[0]
         stock.change = (now / before - 1) * 100
 
         return stock
@@ -27,7 +39,7 @@ def get_stock_with_history(stock_id: str) -> Stock:
     timestamp_history = {}
 
     for _, key in enumerate(history):
-        timestamp_history[int(key.timestamp())] = history[key]
+        timestamp_history[str(key.isoformat())] = history[key]
 
     stock.history = timestamp_history
 
@@ -40,5 +52,3 @@ def apply_transactions(history: dict, transactions: list[Transaction], current_v
 
 if __name__ == '__main__':
     print(get_stock_with_history('AAPL').to_json())
-    time = Timestamp('2021-10-21 10:40:00-0400', tz='America/New_York')
-    print(time.timestamp())

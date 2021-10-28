@@ -25,11 +25,7 @@ def get_stocks():
             stock_ids = list(db.get_stock_ids())
 
             for i in range(skip, top + skip):
-                try:
-                    stocks.append(finance.get_stock(stock_ids[i]).to_json())
-                except Exception as e:
-                    print(stock_ids[i])
-                
+                stocks.append(finance.get_stock(stock_ids[i]).to_json())
 
         else:
             for id in db.get_stock_ids():
