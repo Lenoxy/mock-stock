@@ -27,4 +27,4 @@ npm install
 npm run build
 cd ..
 
-docker-compose up -d --force-recreate --build --env-file ./docker-compose.env
+docker-compose -d --force-recreate --build --env-file ./docker-compose.env up
