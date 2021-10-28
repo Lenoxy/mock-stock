@@ -3,13 +3,13 @@ services:
   backend:
     container_name: "mockstock-backend"
     build: ./backend
-    image: "mock-stock-backend-{VERSION}"
+    image: "mock-stock-backend-${VERSION}"
     ports:
       - "5000:5000"
   frontend:
     container_name: "mockstock-frontend"
     build: ./frontend
-    image: "mock-stock-frontend-{VERSION}"
+    image: "mock-stock-frontend-${VERSION}"
     ports:
       - "80:80"
       - "443:443"
