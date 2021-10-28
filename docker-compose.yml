@@ -10,7 +10,6 @@ services:
     container_name: "mockstock-frontend"
     build: ./frontend
     image: "mock-stock-frontend-{VERSION}"
-    image
     ports:
       - "80:80"
       - "443:443"
