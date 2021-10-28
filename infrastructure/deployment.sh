@@ -14,6 +14,7 @@ fi
 # clear any changes (possibly package-lock.json)
 git reset --hard
 
+echo grep "VERSION=" docker-compose.env | cut -d '=' -f 2
 
 
 $VERSION=$(grep "VERSION=" docker-compose.env | cut -d '=' -f 2)
