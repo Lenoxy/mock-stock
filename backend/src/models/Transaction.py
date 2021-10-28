@@ -7,7 +7,7 @@ class Transaction():
             self.stock_id = transaction['stock_id']
             self.amount = transaction['amount']
 
-    def to_json(self):
+    def to_dict(self):
         return {'id': self.id,
                 'username': self.username,
                 'date': self.date,

@@ -25,12 +25,16 @@ def get_stocks():
             stock_ids = list(db.get_stock_ids())
 
             for i in range(skip, top + skip):
-                stocks.append(finance.get_stock(stock_ids[i]).to_json())
+                try:
+                    stocks.append(finance.get_stock(stock_ids[i]).to_dict())
+                except Exception as e:
+                    print(stock_ids[i])
+                
 
         else:
             for id in db.get_stock_ids():
                 try:
-                    stocks.append(finance.get_stock(id).to_json())
+                    stocks.append(finance.get_stock(id).to_dict())
                 except Exception as e:
                     print(id)
 
@@ -50,7 +54,7 @@ def get_stock(id):
             if id in owned_stocks:
                 stock.amount = owned_stocks[id].amount
 
-        return stock.to_json()
+        return stock.to_dict()
 
     except Exception as e:
         raise
@@ -63,8 +67,8 @@ def buy_stock(id):
     try:
         amount = request.json['amount']
 
-        db.update_owned_stocks(OwnedStock({'username': current_user.username,'id': id, 'amount': amount }))
+        db.update_owned_stock(OwnedStock({'username': current_user.username, 'id': id, 'amount': amount}))
 
-        return db.get_owned_stocks(current_user.username)[id].to_json()
+        return db.get_owned_stocks(current_user.username)[id].to_dict()
     except Exception as e:
         return str(e), 400

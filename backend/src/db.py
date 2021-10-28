@@ -1,30 +1,37 @@
-from models import User, OwnedStock, Transaction
-from datetime import date, timedelta
 import csv
+from datetime import date, timedelta
+
 import mongodb
+from models import User, OwnedStock, Transaction
 
 db = {}
-db['users'] = {'lenoxy': User({
-    'username': 'lenoxy',
-    'password_hash': 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db',
-    'money_liquid': 3123.23
-})}
 db['transactions'] = []
 db['owned_stocks'] = {}
 
-# Users
-def get_user(username: str) -> User:
-    filter = { "username": username }
+collection = mongodb.mongo_client.user
+collection.insert_one({
+    'username': 'lenoxy',
+    'password_hash': 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db',
+    'money_liquid': 3123.23
+})
 
-    collection = mongodb.get_mongo_database().user
+
+# Users
+# check
+def get_user(username: str) -> User:
+    filter = {"username": username}
+
+    collection = mongodb.mongo_client.user
     user = collection.find_one(filter)
     if user:
         print(str(user))
         return User(user)
     raise Exception('Could not find user')
 
+
+# check
 def get_users() -> list[User]:
-    collection = mongodb.get_mongo_database().user
+    collection = mongodb.mongo_client.user
     cursor = collection.find({})
     users = []
     for user in cursor:
@@ -33,50 +40,72 @@ def get_users() -> list[User]:
 
     return users
 
+
+# check
 def update_money_liquid(user: User) -> User:
-    filter = { "username": user.username }
-    collection = mongodb.get_mongo_database().user
+    filter = {"username": user.username}
+    user_collection = mongodb.mongo_client.user
 
     if user:
-        collection.update_one(filter, { "$set": { 'money_liquid': user.money_liquid } })
-        return collection.find_one(filter)
+        user_collection.update_one(filter, {"$set": {'money_liquid': user.money_liquid}})
+        return user_collection.find_one(filter)
     raise Exception('User could not be updated')
 
+
+# check
 def create_user(user: User) -> User:
-    collection = mongodb.get_mongo_database().user
-    collection.insert_one({"username": user.username, "password_hash": user.password_hash, "money_liquid": user.money_liquid})
+    user_collection = mongodb.mongo_client.user
+    user_collection.insert_one(
+        {"username": user.username, "password_hash": user.password_hash, "money_liquid": user.money_liquid})
     return user
 
+
 # Transactions
-def get_transactions(username: str) -> list[Transaction]:
-    if username in db['users']:
-        since_date = date.today() - timedelta(days=5)
-        print(since_date)
-        return filter(lambda t: t.username == username and t.date >= since_date, db['transactions'])
+# check
+def get_transactions(user: User) -> list[Transaction]:
+    since_date = date.today() - timedelta(days=5)
 
-    raise Exception('User does not exist')
+    transaction_collection = mongodb.mongo_client.transaction
+    transactions = mongodb.find(transaction_collection)
+    print(transactions[0].username)
 
+    return filter(lambda t: t.username == user.username and t.date >= since_date, transactions)
+
+
+# check
 def create_transaction(transaction: Transaction) -> Transaction:
-    db['transactions'].push(transaction)
+    transaction_collection = mongodb.mongo_client.transaction
+    transaction_collection.insert_one(transaction.to_dict())
     return transaction
 
+
 # Owned Stocks
-def get_owned_stocks(username: str) -> dict[OwnedStock]:
-    if not username in db['owned_stocks']:
-        db['owned_stocks'][username] = {}
+def get_owned_stocks(user: User) -> list[OwnedStock]:
+    owned_stock_collection = mongodb.mongo_client.owned_stock
+    owned_stocks = mongodb.find(owned_stock_collection, {'username': user.username})
+    return owned_stocks
 
-    return db['owned_stocks'][username]
 
-def update_owned_stocks(owned_stock: OwnedStock) -> list[OwnedStock]:
-    if not owned_stock.id in db['owned_stocks'][owned_stock.username]:
-        db['owned_stocks'][owned_stock.username][owned_stock.id] = OwnedStock(
-            {'id': owned_stock.id, 'username': owned_stock.username, 'amount': 0})
+def update_owned_stock(owned_stock: OwnedStock) -> OwnedStock:
+    filter = {'username': owned_stock.username, 'id': owned_stock.id}
+    owned_stock_collection = mongodb.mongo_client.owned_stock
+    existing_stock = owned_stock_collection.find_one(filter)
 
-    if db['owned_stocks'][owned_stock.username][owned_stock.id].amount + owned_stock.amount < 0:
+    # If stock isn't in DB yet
+    if not existing_stock:
+        if owned_stock.amount < 0:
+            raise Exception("You goin' below zero dude, can't do that")
+        owned_stock_collection.insert_one(owned_stock.to_dict())
+        return owned_stock
+
+    existing_stock = OwnedStock(existing_stock)
+    # If update would give negative number
+    if existing_stock.amount + owned_stock.amount < 0:
         raise Exception("You goin' below zero dude, can't do that")
-    db['owned_stocks'][owned_stock.username][owned_stock.id].amount += owned_stock.amount
 
-    return db['owned_stocks'][owned_stock.username]
+    # add to existing stock
+    owned_stock_collection.update_one(filter, {"$set": {'amount': existing_stock.amount + owned_stock.amount}})
+    return existing_stock
 
 
 # Stock IDs
@@ -84,4 +113,4 @@ def get_stock_ids() -> list[str]:
     with open('src/resources/stock_ids.csv', newline='') as tickers:
         reader = csv.reader(tickers)
         for s in list(reader):
-           yield s[0]
+            yield s[0]
