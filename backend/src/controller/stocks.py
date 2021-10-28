@@ -24,22 +24,15 @@ def get_stocks():
 
             stock_ids = list(db.get_stock_ids())
 
-            for i in range(skip, top + skip):
-                try:
-                    stocks.append(finance.get_stock(stock_ids[i]).to_dict())
-                except Exception as e:
-                    print(stock_ids[i])
+            stocks = finance.get_stocks(stock_ids[skip:top+skip])
                 
 
         else:
-            for id in db.get_stock_ids():
-                try:
-                    stocks.append(finance.get_stock(id).to_dict())
-                except Exception as e:
-                    print(id)
+            stock_ids = list(db.get_stock_ids())
+            stocks = finance.get_stocks(stock_ids)
 
 
-        return jsonify(stocks)
+        return jsonify([stock.to_dict() for stock in stocks])
     except Exception as e:
         raise
         return str(e), 400
@@ -57,7 +50,6 @@ def get_stock(id):
         return stock.to_dict()
 
     except Exception as e:
-        raise
         return str(e), 400
 
 

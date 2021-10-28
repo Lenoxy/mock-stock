@@ -8,7 +8,7 @@ class Stock():
         self.amount: int = None
 
 
-    def to_json(self) -> dict:
+    def to_dict(self) -> dict:
         return {'id': self.id,
             'value': self.value,
             'name': self.name,

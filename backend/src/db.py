@@ -80,10 +80,13 @@ def create_transaction(transaction: Transaction) -> Transaction:
 
 
 # Owned Stocks
-def get_owned_stocks(user: User) -> list[OwnedStock]:
+def get_owned_stocks(username: str) -> list[OwnedStock]:
     owned_stock_collection = mongodb.mongo_client.owned_stock
-    owned_stocks = mongodb.find(owned_stock_collection, {'username': user.username})
-    return owned_stocks
+    owned_stocks = mongodb.find(owned_stock_collection, {'username': username})
+    result = {}
+    for owned_stock in owned_stocks:
+        result[owned_stock.id] = owned_stock 
+    return result
 
 
 def update_owned_stock(owned_stock: OwnedStock) -> OwnedStock:
