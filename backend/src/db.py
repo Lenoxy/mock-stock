@@ -4,10 +4,6 @@ from datetime import date, timedelta
 import mongodb
 from models import User, OwnedStock, Transaction
 
-db = {}
-db['transactions'] = []
-db['owned_stocks'] = {}
-
 collection = mongodb.mongo_client.user
 collection.insert_one({
     'username': 'lenoxy',
@@ -17,7 +13,6 @@ collection.insert_one({
 
 
 # Users
-# check
 def get_user(username: str) -> User:
     filter = {"username": username}
 
@@ -29,7 +24,6 @@ def get_user(username: str) -> User:
     raise Exception('Could not find user')
 
 
-# check
 def get_users() -> list[User]:
     collection = mongodb.mongo_client.user
     cursor = collection.find({})
@@ -41,7 +35,6 @@ def get_users() -> list[User]:
     return users
 
 
-# check
 def update_money_liquid(user: User) -> User:
     filter = {"username": user.username}
     user_collection = mongodb.mongo_client.user
@@ -52,7 +45,6 @@ def update_money_liquid(user: User) -> User:
     raise Exception('User could not be updated')
 
 
-# check
 def create_user(user: User) -> User:
     user_collection = mongodb.mongo_client.user
     user_collection.insert_one(
@@ -61,7 +53,6 @@ def create_user(user: User) -> User:
 
 
 # Transactions
-# check
 def get_transactions(user: User) -> list[Transaction]:
     since_date = date.today() - timedelta(days=5)
 
@@ -72,7 +63,6 @@ def get_transactions(user: User) -> list[Transaction]:
     return filter(lambda t: t.username == user.username and t.date >= since_date, transactions)
 
 
-# check
 def create_transaction(transaction: Transaction) -> Transaction:
     transaction_collection = mongodb.mongo_client.transaction
     transaction_collection.insert_one(transaction.to_dict())
@@ -85,7 +75,7 @@ def get_owned_stocks(username: str) -> list[OwnedStock]:
     owned_stocks = mongodb.find(owned_stock_collection, {'username': username})
     result = {}
     for owned_stock in owned_stocks:
-        result[owned_stock.id] = owned_stock 
+        result[owned_stock.id] = owned_stock
     return result
 
 
