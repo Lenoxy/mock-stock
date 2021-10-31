@@ -23,4 +23,4 @@ def instantiate_entity(entity_dict, table_name):
     elif table_name == "owned_stock":
         return OwnedStock(entity_dict)
     else:
-        raise NotImplementedError("Entity for table does not exist")
+        raise NotImplementedError("Entity for table does not exist or is not referenced in mongodb.py")

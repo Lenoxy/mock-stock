@@ -25,14 +25,7 @@ def get_user(username: str) -> User:
 
 
 def get_users() -> list[User]:
-    collection = mongodb.mongo_client.user
-    cursor = collection.find({})
-    users = []
-    for user in cursor:
-        users.append(User(user))
-        print(user['username'])
-
-    return users
+    return mongodb.find(mongodb.mongo_client.user)
 
 
 def update_money_liquid(user: User) -> User:
