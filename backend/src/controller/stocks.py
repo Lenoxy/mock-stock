@@ -34,7 +34,6 @@ def get_stocks():
 
         return jsonify([stock.to_dict() for stock in stocks])
     except Exception as e:
-        raise
         return str(e), 400
 
 

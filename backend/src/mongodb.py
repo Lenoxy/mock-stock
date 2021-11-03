@@ -1,10 +1,12 @@
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
+import os
 
 from models import User, Transaction, OwnedStock
 
-CONNECTION_STRING = "mongodb://root:9876512345@localhost:27017"
+
+CONNECTION_STRING = os.environ.get('DB_CONNECTION', 'mongodb://root:9876512345@localhost:27017')
 mongo_client: Database = MongoClient(CONNECTION_STRING).mockstock
 
 def find(collection: Collection, filter = None):

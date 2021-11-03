@@ -6,6 +6,8 @@ services:
     image: "mock-stock-backend-${VERSION}"
     ports:
       - "5000:5000"
+    environment:
+      - DB_CONNECTION=mongodb://root:9876512345@mockstock-database:27017
   frontend:
     container_name: "mockstock-frontend"
     build: ./frontend
