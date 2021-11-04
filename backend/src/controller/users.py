@@ -1,6 +1,6 @@
-import db
 from flask import Blueprint, jsonify
 import finance
+import db
 
 users = Blueprint('users', __name__)
 
@@ -21,7 +21,7 @@ def get_user(username):
         stocks = finance.get_stocks(stock_ids)
         for stock in stocks:
             stock.amount = owned_stocks[stock.id].amount
-            money_in_stocks += stock.amount * finance.get_stock_value(stock.id)
+            money_in_stocks += stock.amount * stock.value
 
         user.money_in_stocks = money_in_stocks
         user.stocks = [stock.to_dict() for stock in stocks]
