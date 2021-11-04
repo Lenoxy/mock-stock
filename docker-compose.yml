@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   backend:
-    container_name: "mockstock-backend"
+    container_name: "mock-stock-backend-${VERSION}"
     build: ./backend
     image: "mock-stock-backend-${VERSION}"
     ports:
@@ -9,14 +9,14 @@ services:
     environment:
       - DB_CONNECTION=mongodb://root:9876512345@mockstock-database:27017
   frontend:
-    container_name: "mockstock-frontend"
+    container_name: "mock-stock-frontend-${VERSION}"
     build: ./frontend
     image: "mock-stock-frontend-${VERSION}"
     ports:
       - "80:80"
       - "443:443"
   database:
-    container_name: "mockstock-database"
+    container_name: "mock-stock-database"
     image: mongo
     restart: always
     environment:
