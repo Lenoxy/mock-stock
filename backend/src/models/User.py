@@ -10,7 +10,7 @@ class User(UserMixin):
             self.password_hash = user['password_hash']
             self.money_liquid = user['money_liquid']
 
-    def to_json(self):
+    def to_dict(self):
         return {"username": self.username,
                 "money_liquid": self.money_liquid}
 

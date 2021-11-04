@@ -1,23 +1,71 @@
 from pandas._libs.tslibs.timestamps import Timestamp
+from pymongo.common import raise_config_error
 from models import Transaction, Stock
 import yfinance as yf
+from datetime import datetime, timedelta
+
+
+stock_names = {}
+tickers = {}
+
 
 def get_stock(stock_id: str) -> Stock:
     try:
-        ticker = yf.Ticker(stock_id)
+        ticker = {}
+        if stock_id in tickers:
+            ticker = tickers[stock_id]
+        else:
+            tickers[stock_id] = yf.Ticker(stock_id)
+            ticker = tickers[stock_id]
         stock = Stock()
 
         stock.id = stock_id
-        stock.value = ticker.history().tail(1)['Close'].iloc[0]
+        history_for_value = ticker.history(period='2d', interval='1d')
+        stock.value = history_for_value.tail(1)['Close'].iloc[0]
         stock.name = ticker.info['longName']
 
-        before = ticker.history(period='2d', interval='1d').tail(2)['Close'].iloc[0]
-        now = ticker.history(period='2d', interval='1d').tail(1)['Close'].iloc[0]
+        change_values = ticker.history(period='2d', interval='1d')
+        before = change_values.tail(2)['Close'].iloc[0]
+        now = change_values.tail(1)['Close'].iloc[0]
         stock.change = (now / before - 1) * 100
 
         return stock
     except:
         raise Exception(f"Sorry dude, couldn't get you the stock {stock_id}")
+
+
+def get_stocks(stock_ids: list[str]) -> list[Stock]:
+    try:
+        if len(stock_ids) == 1:
+            return [get_stock(stock_ids[0])]
+
+        data = yf.download( tickers=stock_ids, period="2d", interval="1d")['Close']
+
+        stocks = []
+
+        for stock_data in data.items():
+                
+            print(stock_data[1].iloc[1])
+            stock = Stock()
+
+            stock.id = stock_data[0]
+            stock.value = stock_data[1].iloc[1]
+
+            if stock_data[0] in stock_names:
+                stock.name = stock_names[stock_data[0]]
+            else:
+                stock_names[stock_data[0]] = yf.Ticker(stock_data[0]).info['longName']
+                stock.name = stock_names[stock_data[0]]
+
+            before = stock_data[1].iloc[0]
+            now = stock_data[1].iloc[1]
+            stock.change = (now / before - 1) * 100
+
+            stocks.append(stock)
+        
+        return stocks
+    except:
+        raise Exception(f"Sorry dude, couldn't get you the stocks")
 
 
 def get_stock_with_history(stock_id: str) -> Stock:
@@ -27,7 +75,7 @@ def get_stock_with_history(stock_id: str) -> Stock:
     timestamp_history = {}
 
     for _, key in enumerate(history):
-        timestamp_history[int(key.timestamp())] = history[key]
+        timestamp_history[str(key.isoformat())] = history[key]
 
     stock.history = timestamp_history
 
@@ -39,6 +87,4 @@ def apply_transactions(history: dict, transactions: list[Transaction], current_v
 
 
 if __name__ == '__main__':
-    print(get_stock_with_history('AAPL').to_json())
-    time = Timestamp('2021-10-21 10:40:00-0400', tz='America/New_York')
-    print(time.timestamp())
+    print(get_stocks(['AAPL', 'GOOG', 'DDD']))

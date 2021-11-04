@@ -21,7 +21,7 @@ def register_user():
         user = db.create_user(user)
         login_user(user)
 
-        return user.to_json()
+        return user.to_dict()
 
     except Exception as e:
         print(e)
@@ -39,7 +39,7 @@ def post_login():
         user = db.get_user(username)
         if user.password_hash == password_hash:
             login_user(user)
-            return user.to_json()
+            return user.to_dict()
         return f'Wrong password dude', 401
     except Exception as e:
         return str(e), 400

@@ -6,7 +6,7 @@ users = Blueprint('users', __name__)
 
 @users.route("/users")
 def get_users():
-    return jsonify([u.to_json() for u in db.get_users()])
+    return jsonify([u.to_dict() for u in db.get_users()])
     # return db.get_user('Leo1').to_json()
 
 

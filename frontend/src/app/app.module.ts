@@ -14,6 +14,9 @@ import { ProfileComponent } from './profile/profile.component';
 import { PurchaseComponent } from './purchase/purchase.component';
 import { SellComponent } from './sell/sell.component';
 import { StockListComponent } from './stock-list/stock-list.component';
+import {TableModule} from 'primeng/table';
+
+
 
 @NgModule({
   declarations: [
@@ -25,7 +28,7 @@ import { StockListComponent } from './stock-list/stock-list.component';
     ProfileComponent,
     PurchaseComponent,
     SellComponent,
-    StockListComponent
+    StockListComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,6 +36,8 @@ import { StockListComponent } from './stock-list/stock-list.component';
     BrowserAnimationsModule,
     ButtonModule,
     AvatarModule,
+    TableModule,
+    ButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
