@@ -82,9 +82,10 @@ def get_stock_with_history(stock_id: str) -> Stock:
     return stock
 
 
-def apply_transactions(history: dict, transactions: list[Transaction], current_value: float):
-    pass
+def get_stock_value(stock_id):
+    data = yf.download( tickers=stock_id, period="1d", interval="1d")['Close']
+    return data[0]
 
 
 if __name__ == '__main__':
-    print(get_stocks(['AAPL', 'GOOG', 'DDD']))
+    print(get_stock_value('aapl'))

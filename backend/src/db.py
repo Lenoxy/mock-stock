@@ -19,7 +19,6 @@ def get_user(username: str) -> User:
     collection = mongodb.mongo_client.user
     user = collection.find_one(filter)
     if user:
-        print(str(user))
         return User(user)
     raise Exception('Could not find user')
 
@@ -39,6 +38,12 @@ def update_money_liquid(user: User) -> User:
 
 
 def create_user(user: User) -> User:
+    filter = {"username": user.username}
+
+    collection = mongodb.mongo_client.user
+    if collection.find_one(filter):
+        raise Exception('User already exists')
+
     user_collection = mongodb.mongo_client.user
     user_collection.insert_one(
         {"username": user.username, "password_hash": user.password_hash, "money_liquid": user.money_liquid})
@@ -88,6 +93,9 @@ def update_owned_stock(owned_stock: OwnedStock) -> OwnedStock:
     # If update would give negative number
     if existing_stock.amount + owned_stock.amount < 0:
         raise Exception("You goin' below zero dude, can't do that")
+
+    if existing_stock.amount + owned_stock.amount == 0:
+        owned_stock_collection.remove(filter)
 
     # add to existing stock
     owned_stock_collection.update_one(filter, {"$set": {'amount': existing_stock.amount + owned_stock.amount}})
