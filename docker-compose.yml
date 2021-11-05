@@ -1,20 +1,22 @@
 version: "3.8"
 services:
   backend:
-    container_name: "mock-stock-backend-${VERSION}"
+    container_name: "mock-stock-backend"
     build: ./backend
     image: "mock-stock-backend-${VERSION}"
     ports:
       - "5000:5000"
     environment:
-      - DB_CONNECTION=mongodb://root:9876512345@mockstock-database:27017
+      - DB_CONNECTION=mongodb://root:9876512345@mock-stock-database:27017
   frontend:
-    container_name: "mock-stock-frontend-${VERSION}"
+    container_name: "mock-stock-frontend"
     build: ./frontend
     image: "mock-stock-frontend-${VERSION}"
     ports:
       - "80:80"
       - "443:443"
+    depends_on:
+      - "backend"
   database:
     container_name: "mock-stock-database"
     image: mongo
@@ -24,5 +26,3 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: 9876512345
     ports:
       - "27017:27017"
-
-

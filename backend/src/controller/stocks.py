@@ -23,14 +23,17 @@ def get_stocks():
                 skip = int(skip)
 
             stock_ids = list(db.get_stock_ids())
-
             stocks = finance.get_stocks(stock_ids[skip:top+skip])
                 
-
         else:
             stock_ids = list(db.get_stock_ids())
             stocks = finance.get_stocks(stock_ids)
 
+        if current_user.is_authenticated:
+            owned_stocks = db.get_owned_stocks(current_user.username)
+            for stock in stocks:
+                if stock.id in owned_stocks:
+                    stock.amount = owned_stocks[stock.id].amount
 
         return jsonify([stock.to_dict() for stock in stocks])
     except Exception as e:
@@ -40,6 +43,7 @@ def get_stocks():
 @stocks.route("/stocks/<string:id>", methods=['GET'])
 def get_stock(id):
     try:
+        id = id.upper()
         stock = finance.get_stock_with_history(id)
         if current_user.is_authenticated:
             owned_stocks = db.get_owned_stocks(current_user.username)
@@ -56,10 +60,16 @@ def get_stock(id):
 @login_required
 def buy_stock(id):
     try:
+        id = id.upper()
         amount = request.json['amount']
+        current_value = finance.get_stock_value(id)
+        if current_user.money_liquid < amount * current_value:
+            raise Exception("You can't afford that xD, you broke af dude...")
 
         db.update_owned_stock(OwnedStock({'username': current_user.username, 'id': id, 'amount': amount}))
+        current_user.money_liquid -= amount * current_value
 
-        return db.get_owned_stocks(current_user.username)[id].to_dict()
+        db.update_money_liquid(current_user)
+        return f'{amount} {id} stocks'
     except Exception as e:
         return str(e), 400

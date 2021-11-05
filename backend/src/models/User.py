@@ -10,9 +10,15 @@ class User(UserMixin):
             self.password_hash = user['password_hash']
             self.money_liquid = user['money_liquid']
 
+        self.money_in_stocks: float = 0
+        self.stocks = []
+
     def to_dict(self):
         return {"username": self.username,
-                "money_liquid": self.money_liquid}
+                "money_liquid": self.money_liquid,
+                "money_in_stocks": self.money_in_stocks,
+                "score": self.money_liquid + self.money_in_stocks,
+                "stocks": self.stocks}
 
     def is_authenticated(self):
         return True

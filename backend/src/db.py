@@ -5,11 +5,12 @@ import mongodb
 from models import User, OwnedStock, Transaction
 
 collection = mongodb.mongo_client.user
-collection.insert_one({
-    'username': 'lenoxy',
-    'password_hash': 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db',
-    'money_liquid': 3123.23
-})
+if not collection.find_one({"username": 'lenoxy'}):
+    collection.insert_one({
+        'username': 'lenoxy',
+        'password_hash': 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db',
+        'money_liquid': 6969.69
+    })
 
 
 # Users
@@ -19,7 +20,6 @@ def get_user(username: str) -> User:
     collection = mongodb.mongo_client.user
     user = collection.find_one(filter)
     if user:
-        print(str(user))
         return User(user)
     raise Exception('Could not find user')
 
@@ -39,6 +39,12 @@ def update_money_liquid(user: User) -> User:
 
 
 def create_user(user: User) -> User:
+    filter = {"username": user.username}
+
+    collection = mongodb.mongo_client.user
+    if collection.find_one(filter):
+        raise Exception('User already exists')
+
     user_collection = mongodb.mongo_client.user
     user_collection.insert_one(
         {"username": user.username, "password_hash": user.password_hash, "money_liquid": user.money_liquid})
@@ -63,7 +69,7 @@ def create_transaction(transaction: Transaction) -> Transaction:
 
 
 # Owned Stocks
-def get_owned_stocks(username: str) -> list[OwnedStock]:
+def get_owned_stocks(username: str) -> dict[OwnedStock]:
     owned_stock_collection = mongodb.mongo_client.owned_stock
     owned_stocks = mongodb.find(owned_stock_collection, {'username': username})
     result = {}
@@ -88,6 +94,9 @@ def update_owned_stock(owned_stock: OwnedStock) -> OwnedStock:
     # If update would give negative number
     if existing_stock.amount + owned_stock.amount < 0:
         raise Exception("You goin' below zero dude, can't do that")
+
+    if existing_stock.amount + owned_stock.amount == 0:
+        owned_stock_collection.remove(filter)
 
     # add to existing stock
     owned_stock_collection.update_one(filter, {"$set": {'amount': existing_stock.amount + owned_stock.amount}})
