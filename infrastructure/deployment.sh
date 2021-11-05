@@ -56,7 +56,7 @@ else
 
     rm -f docker-compose.env
     echo VERSION=$NEXT_VERSION  > /home/mock-stock/mock-stock/docker-compose.env
-    git commmit -m "VERSION UPDATE"
+    git commit -m "VERSION UPDATE"
     git push
 
 fi
