@@ -13,8 +13,8 @@ fi
 
 docker-compose --env-file ./docker-compose.env down
 
-#git reset --hard
-#git pull origin master
+git reset --hard
+git pull origin master
 
 docker-compose -d --force-recreate --build --env-file ./docker-compose.env up
 
