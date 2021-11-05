@@ -26,8 +26,8 @@ NEXT_VERSION="$(($CURRENT_VERSION + 1))"
 echo $CURRENT_VERSION
 echo $NEXT_VERSION
 
-BACKEND_CONTAINER="$(docker ps -q -f name="mock-stock-backend-1" -f status="running")"
-FRONTEND_CONTAINER="$(docker ps -q -f name="mock-stock-frontend-1" -f status="running")"
+BACKEND_CONTAINER="$(docker ps -q -f name="mock-stock-backend" -f status="running")"
+FRONTEND_CONTAINER="$(docker ps -q -f name="mock-stock-frontend" -f status="running")"
 
 if [ -z "$BACKEND_CONTAINER" ] || [ -z "$FRONTEND_CONTAINER"];
 then
