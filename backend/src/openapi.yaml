@@ -129,32 +129,6 @@ paths:
             $ref: "#/definitions/User"
         "404":
           description: "You don't have any stocks my friend"
-  /me/stocks:
-    get:
-      tags:
-      - "me"
-      summary: "Get my stocks"
-      description: "Gets a list of the owned stocks with the amount of them."
-      operationId: "getMyStocks"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "header"
-        name: "cookie"
-        description: "The Cookie to identify / authenticate the user"
-        required: true
-        type: "string"
-      security:
-        - cookieAuth: []
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Stock"
-        "404":
-          description: "You don't have any stocks my friend"
   /users:
     get:
       tags:
@@ -179,30 +153,28 @@ paths:
               $ref: "#/definitions/SimpleUser"
         "400":
           description: "Couldn't get the users"
-  /users/{username}/stocks:
+  /users/{username}:
     get:
       tags:
       - "users"
-      summary: "Get users stocks"
-      description: "Gets a list of the stocks with the amount of them owned by the provided user."
-      operationId: "getUsersStocks"
+      summary: "Get a users data"
+      description: "Gets user data"
+      operationId: "getMyUser"
       produces:
       - "application/json"
       parameters:
       - in: "path"
         name: "username"
-        description: "The users username from which we want to get the stocks"
+        description: "The users username whose infos are requested"
         required: true
         type: "string"
       responses:
         "200":
           description: "successful operation"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Stock"
+            $ref: "#/definitions/User"
         "404":
-          description: "He doesn't have any stocks, poor dude."
+          description: "Nah dude, you're not gonna get any infos from me about this user"
   /auth/register:
     post:
       tags:
@@ -280,6 +252,10 @@ definitions:
         format: "int64"
         example: 3
         description: "The amount of this stock someone holds."
+      change:
+        type: "number"
+        example: -2.93
+        description: "How much the stock changed over the last hour"
       valueHistory:
         type: "array"
         items:
@@ -316,43 +292,47 @@ definitions:
     properties:
       username:
         type: "string"
-        example: "Lenoxy"
+        example: "lenoxy"
         description: "The users unique username"
-      moneyInStocks:
+      money_in_stocks:
         type: "number"
         example: "6045.67"
-        description: "Total value of stocks from user, add to moneyLiquid to get Score"
-      moneyLiquid:
+        description: "Total value of stocks from user"
+      money_liquid:
         type: "number"
         example: "1045.344"
-        description: "Value uf money balance from user, add to moneyInStocks to get Score"
-      moneyInStocksHistory:
+        description: "Value uf money balance from user"
+      score:
+        type: "number"
+        example: "7091.67"
+        description: "Score of the user. This is the liquid money and the money in stocks combined"
+      money_in_stocks_history:
+        $ref: "#/definitions/History"
+      money_liquid_history:
+        $ref: "#/definitions/History"
+      stocks:
         type: "array"
         items:
-          type: "number"
-        example: [5249.2, 5590.22, 7235.00]
-        description: "The History of the value invested in stocks by the user. Duration over 5 days with 1 hour intervals, first value is newest."
-      moneyLiquidHistory:
-        type: "array"
-        items:
-          type: "number"
-        example: [5249.2, 5590.22, 7235.00]
-        description: "The History of the bank balance of the user. Duration over 5 days with 1 hour intervals, first value is newest."
+          $ref: "#/definitions/SimpleStock"
   SimpleUser:
     type: "object"
     properties:
       username:
         type: "string"
-        example: "Lenoxy"
+        example: "lenoxy"
         description: "The users unique username"
-      moneyInStocks:
+      money_in_Stocks:
         type: "number"
         example: "6045.67"
         description: "Total value of stocks from user, add to moneyLiquid to get Score"
-      moneyLiquid:
+      money_liquid:
         type: "number"
         example: "1045.344"
         description: "Value uf money balance from user, add to moneyInStocks to get Score"
+      score:
+        type: "number"
+        example: "7091.67"
+        description: "Score of the user. This is the liquid money and the money in stocks combined"
     description: "User Dto with less overhead for List views."
   AuthRequest:
     type: "object"
@@ -365,3 +345,10 @@ definitions:
         type: "string"
         example: "Sugondisnuts"
         description: "The password from the user, used for authentication"
+  History:
+    type: "object"
+    additionalProperties:
+      type: "number"
+    example:
+      "2021-11-01T09:30:00-04:00": 149.42999267578125
+      "2021-11-01T09:35:00-04:00": 149.25999450683594

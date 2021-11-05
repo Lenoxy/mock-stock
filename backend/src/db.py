@@ -5,11 +5,12 @@ import mongodb
 from models import User, OwnedStock, Transaction
 
 collection = mongodb.mongo_client.user
-collection.insert_one({
-    'username': 'lenoxy',
-    'password_hash': 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db',
-    'money_liquid': 3123.23
-})
+if not collection.find_one({"username": 'lenoxy'}):
+    collection.insert_one({
+        'username': 'lenoxy',
+        'password_hash': 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db',
+        'money_liquid': 6969.69
+    })
 
 
 # Users
@@ -68,7 +69,7 @@ def create_transaction(transaction: Transaction) -> Transaction:
 
 
 # Owned Stocks
-def get_owned_stocks(username: str) -> list[OwnedStock]:
+def get_owned_stocks(username: str) -> dict[OwnedStock]:
     owned_stock_collection = mongodb.mongo_client.owned_stock
     owned_stocks = mongodb.find(owned_stock_collection, {'username': username})
     result = {}

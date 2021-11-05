@@ -23,14 +23,17 @@ def get_stocks():
                 skip = int(skip)
 
             stock_ids = list(db.get_stock_ids())
-
             stocks = finance.get_stocks(stock_ids[skip:top+skip])
                 
-
         else:
             stock_ids = list(db.get_stock_ids())
             stocks = finance.get_stocks(stock_ids)
 
+        if current_user.is_authenticated:
+            owned_stocks = db.get_owned_stocks(current_user.username)
+            for stock in stocks:
+                if stock.id in owned_stocks:
+                    stock.amount = owned_stocks[stock.id].amount
 
         return jsonify([stock.to_dict() for stock in stocks])
     except Exception as e:
