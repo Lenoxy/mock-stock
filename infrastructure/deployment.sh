@@ -4,12 +4,12 @@ echo Deployment Script
 cd /home/mock-stock/mock-stock || exit
 
 # pull release
-#BRANCH=$(git rev-parse --abbrev-ref HEAD)
-#if [[ "$BRANCH" != "master" ]]; then
-#  echo 'Aborting script, wrong branch';
-#  echo "$BRANCH";
-#  exit 1;
-#fi
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [[ "$BRANCH" != "master" ]]; then
+  echo 'Aborting script, wrong branch';
+  echo "$BRANCH";
+  exit 1;
+fi
 
 docker-compose --env-file ./docker-compose.env down
 
