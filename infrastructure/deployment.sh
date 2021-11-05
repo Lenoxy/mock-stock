@@ -11,12 +11,14 @@ if [[ "$BRANCH" != "master" ]]; then
   exit 1;
 fi
 
-docker-compose --env-file ./docker-compose.env down
+echo "shutting down docker containers"
+
+docker-compose --env-file docker-compose.env down
 
 git reset --hard
 git pull origin master
 
-docker-compose -d --force-recreate --build --env-file ./docker-compose.env up
+docker-compose -d --force-recreate --build --env-file docker-compose.env up
 
 CURRENT_VERSION="$(grep "VERSION=" ./../docker-compose.env | cut -d '=' -f 2)"
 NEXT_VERSION="$(($CURRENT_VERSION + 1))"
