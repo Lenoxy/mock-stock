@@ -20,7 +20,7 @@ docker-compose --env-file docker-compose.env down
 
 docker-compose --env-file docker-compose.env up -d --build --force-recreate
 
-CURRENT_VERSION="$(grep "VERSION=" ./../docker-compose.env | cut -d '=' -f 2)"
+CURRENT_VERSION="$(grep "VERSION=" /home/mock-stock/mock-stock/docker-compose.env | cut -d '=' -f 2)"
 NEXT_VERSION="$(($CURRENT_VERSION + 1))"
 
 echo $CURRENT_VERSION
