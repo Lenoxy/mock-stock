@@ -29,7 +29,7 @@ echo $NEXT_VERSION
 BACKEND_CONTAINER="$(docker ps -q -f name="mock-stock-backend" -f status="running")"
 FRONTEND_CONTAINER="$(docker ps -q -f name="mock-stock-frontend" -f status="running")"
 
-if [[ -z "$BACKEND_CONTAINER" ]] || [[ -z "$FRONTEND_CONTAINER"]]
+if [[ -z "$BACKEND_CONTAINER" ]] || [[ -z "$FRONTEND_CONTAINER"]];
 then
     echo "[BACKEND] shutting down"
     docker stop mock-stock-backend-$CURRENT_VERSION
