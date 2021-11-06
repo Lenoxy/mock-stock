@@ -15,8 +15,8 @@ echo "shutting down docker containers"
 
 docker-compose --env-file docker-compose.env down
 
-git reset --hard
-git pull origin master
+#git reset --hard
+#git pull origin master
 
 docker-compose --env-file docker-compose.env up -d --build --force-recreate
 
@@ -56,6 +56,7 @@ else
 
     rm -f docker-compose.env
     echo VERSION=$NEXT_VERSION  > /home/mock-stock/mock-stock/docker-compose.env
+    echo $NEXT_VERSION
     git commit -m "VERSION UPDATE"
     git push
 
