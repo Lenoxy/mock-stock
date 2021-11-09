@@ -21,6 +21,8 @@ def get_users():
         for stock in user.owned_stocks:
             user.money_in_stocks += user.owned_stocks[stock].amount * stock_values[stock]
 
+    users = sorted(users, key=lambda user: user.money_in_stocks + user.money_liquid, reverse=True)
+
     return jsonify([u.to_dict() for u in users])
 
 
