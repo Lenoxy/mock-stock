@@ -15,3 +15,8 @@ Content-Type: application/json
   "username": "lenoxy",
   "password": "1234"
 }
+
+###
+GET http://localhost:5000/stocks
+
+

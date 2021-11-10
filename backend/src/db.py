@@ -96,8 +96,13 @@ def update_owned_stock(owned_stock: OwnedStock) -> OwnedStock:
 
 
 # Stock IDs
-def get_stock_ids() -> list[str]:
+def get_stock_ids() -> dict[str]:
     with open('src/resources/stock_ids.csv', newline='') as tickers:
+        stocks = {}
         reader = csv.reader(tickers)
         for s in list(reader):
-            yield s[0]
+            stocks[s[0]] = s[1]
+        return stocks
+
+if __name__ == '__main__':
+    print(get_stock_ids())

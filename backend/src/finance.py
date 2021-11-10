@@ -1,11 +1,12 @@
 from pandas._libs.tslibs.timestamps import Timestamp
 from pymongo.common import raise_config_error
+import db
 from models import Transaction, Stock
 import yfinance as yf
 from datetime import datetime, timedelta
 
 
-stock_names = {}
+stock_dict = db.get_stock_ids()
 tickers = {}
 
 
@@ -51,11 +52,12 @@ def get_stocks(stock_ids: list[str]) -> list[Stock]:
             stock.id = stock_data[0]
             stock.value = stock_data[1].iloc[1]
 
-            if stock_data[0] in stock_names:
-                stock.name = stock_names[stock_data[0]]
+            if stock_data[0] in stock_dict:
+                stock.name = stock_dict[stock_data[0]]
             else:
-                stock_names[stock_data[0]] = yf.Ticker(stock_data[0]).info['longName']
-                stock.name = stock_names[stock_data[0]]
+                # Fallback
+                stock_dict[stock_data[0]] = yf.Ticker(stock_data[0]).info['longName']
+                stock.name = stock_dict[stock_data[0]]
 
             before = stock_data[1].iloc[0]
             now = stock_data[1].iloc[1]
@@ -98,3 +100,4 @@ def get_stock_values(stock_ids: list) -> dict[float]:
 
 if __name__ == '__main__':
     print(get_stock_values(['aapl','goog','MMM']))
+
