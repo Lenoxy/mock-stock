@@ -24,5 +24,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 9876512345
+    volumes:
+      - mock-stock-data:/data/db
     ports:
       - "27017:27017"
+volumes:
+  mock-stock-data:
