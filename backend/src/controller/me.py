@@ -15,13 +15,17 @@ def get_me():
 
         owned_stocks = db.get_owned_stocks(current_user.username)
         stock_ids = [key for _, key in enumerate(owned_stocks)]
-        stocks = finance.get_stocks(stock_ids)
-        for stock in stocks:
-            stock.amount = owned_stocks[stock.id].amount
-            money_in_stocks += stock.amount * stock.value
+
+        if stock_ids:
+            stocks = finance.get_stocks(stock_ids)
+            for stock in stocks:
+                stock.amount = owned_stocks[stock.id].amount
+                money_in_stocks += stock.amount * stock.value
+            
+            user.stocks = [stock.to_dict() for stock in stocks]
 
         user.money_in_stocks = money_in_stocks
-        user.stocks = [stock.to_dict() for stock in stocks]
+        
         return user.to_dict()
 
     except Exception as e:

@@ -88,6 +88,10 @@ def get_stock_value(stock_id: str):
 
 
 def get_stock_values(stock_ids: list) -> dict[float]:
+
+    if len(stock_ids) == 1:
+        return {stock_ids[0]: get_stock_value(stock_ids[0])}
+
     data = yf.download( tickers=stock_ids, period="1d", interval="1d")['Close']
     return {stock_data[0]: stock_data[1].iloc[0] for stock_data in data.items()}
 
