@@ -62,7 +62,7 @@ def get_stocks(stock_ids: list[str]) -> list[Stock]:
             stock.change = (now / before - 1) * 100
 
             stocks.append(stock)
-        
+
         return stocks
     except:
         raise Exception(f"Sorry dude, couldn't get you the stocks")
@@ -82,10 +82,15 @@ def get_stock_with_history(stock_id: str) -> Stock:
     return stock
 
 
-def get_stock_value(stock_id):
+def get_stock_value(stock_id: str):
     data = yf.download( tickers=stock_id, period="1d", interval="1d")['Close']
     return data[0]
 
 
+def get_stock_values(stock_ids: list) -> dict[float]:
+    data = yf.download( tickers=stock_ids, period="1d", interval="1d")['Close']
+    return {stock_data[0]: stock_data[1].iloc[0] for stock_data in data.items()}
+
+
 if __name__ == '__main__':
-    print(get_stock_value('aapl'))
+    print(get_stock_values(['aapl','goog','MMM']))

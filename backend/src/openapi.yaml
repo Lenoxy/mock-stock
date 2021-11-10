@@ -159,7 +159,7 @@ paths:
       - "users"
       summary: "Get a users data"
       description: "Gets user data"
-      operationId: "getMyUser"
+      operationId: "getUser"
       produces:
       - "application/json"
       parameters:
@@ -217,7 +217,7 @@ paths:
               type: string
               description: JSESSIONID=abcde12345; Path=/; HttpOnly
   /auth/logout:
-    get:
+    post:
       tags:
       - "auth"
       summary: "Logs out current logged in user session"
@@ -257,11 +257,7 @@ definitions:
         example: -2.93
         description: "How much the stock changed over the last hour"
       valueHistory:
-        type: "array"
-        items:
-          type: "number"
-        example: [170.2, 120.22, 140.00]
-        description: "The History of the score. Duration over 5 days with 1 hour intervals, first value is newest."
+        $ref: "#/definitions/History"
   SimpleStock:
     type: "object"
     properties:
