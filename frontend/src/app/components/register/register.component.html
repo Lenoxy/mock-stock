@@ -1,0 +1,19 @@
+<p-card header="Register" class="card-center">
+
+    <div class="form-input">
+    <div class="p-mb-3 p-text-left">Username:</div>
+    <input type="text" pInputText [(ngModel)]="username">
+    </div>
+
+    <div class="form-input">
+    <div class="p-mb-3 p-text-left">Password:</div>
+    <p-password [(ngModel)]="password" [feedback]="false"></p-password>
+    </div>
+
+    <div class="form-input">
+    <div class="p-mb-3 p-text-left">Repeat Password:</div>
+    <p-password [(ngModel)]="repeatPassword" [feedback]="false"></p-password>
+    </div>
+
+    <p-button label="Register"></p-button>
+</p-card>

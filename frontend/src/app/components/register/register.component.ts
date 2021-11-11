@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {AccordionModule} from 'primeng/accordion';
 
 @Component({
   selector: 'app-register',
@@ -7,6 +6,10 @@ import {AccordionModule} from 'primeng/accordion';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
+
+  username = '';
+  password = '';
+  repeatPassword = '';
 
   constructor() { }
 
