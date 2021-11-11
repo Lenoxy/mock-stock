@@ -12,9 +12,11 @@ stocks = Blueprint('stocks', __name__)
 @stocks.route("/stocks")
 def get_stocks():
     try:
-        top = request.args.get('top')
+        # Paging start
         skip = request.args.get('skip')
-        stocks = []
+        # Paging end
+        top = request.args.get('top')
+        local_stocks = []
         if top:
             top = int(top)
             if not skip:
@@ -22,20 +24,22 @@ def get_stocks():
             else:
                 skip = int(skip)
 
-            stock_ids = list(db.get_stock_ids())
-            stocks = finance.get_stocks(stock_ids[skip:top+skip])
+            stock_list = list(db.get_stock_ids())
+            local_stocks = finance.get_stocks(stock_list[skip:top+skip])
                 
         else:
-            stock_ids = list(db.get_stock_ids())
-            stocks = finance.get_stocks(stock_ids)
+            stock_list = list(db.get_stock_ids())
+            local_stocks = finance.get_stocks(stock_list)
+
+        print(stock_list)
 
         if current_user.is_authenticated:
             owned_stocks = db.get_owned_stocks(current_user.username)
-            for stock in stocks:
+            for stock in local_stocks:
                 if stock.id in owned_stocks:
                     stock.amount = owned_stocks[stock.id].amount
 
-        return jsonify([stock.to_dict() for stock in stocks])
+        return jsonify([stock.to_dict() for stock in local_stocks])
     except Exception as e:
         return str(e), 400
 

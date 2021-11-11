@@ -45,7 +45,7 @@ def post_login():
         return str(e), 400
 
 
-@auth.route("/auth/logout")
+@auth.route("/auth/logout", methods=['POST'])
 @login_required
 def get_logout():
     logout_user()

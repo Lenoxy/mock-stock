@@ -3,7 +3,7 @@ POST http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
-  "username": "lenoxy",
+  "username": "lenoxyyx",
   "password": "1234"
 }
 
@@ -15,3 +15,8 @@ Content-Type: application/json
   "username": "lenoxy",
   "password": "1234"
 }
+
+###
+GET http://localhost:5000/stocks
+
+

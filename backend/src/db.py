@@ -4,14 +4,6 @@ from datetime import date, timedelta
 import mongodb
 from models import User, OwnedStock, Transaction
 
-collection = mongodb.mongo_client.user
-if not collection.find_one({"username": 'lenoxy'}):
-    collection.insert_one({
-        'username': 'lenoxy',
-        'password_hash': 'd404559f602eab6fd602ac7680dacbfaadd13630335e951f097af3900e9de176b6db28512f2e000b9d04fba5133e8b1c6e8df59db3a8ab9d60be4b97cc9e81db',
-        'money_liquid': 6969.69
-    })
-
 
 # Users
 def get_user(username: str) -> User:
@@ -104,8 +96,13 @@ def update_owned_stock(owned_stock: OwnedStock) -> OwnedStock:
 
 
 # Stock IDs
-def get_stock_ids() -> list[str]:
+def get_stock_ids() -> dict[str]:
     with open('src/resources/stock_ids.csv', newline='') as tickers:
+        stocks = {}
         reader = csv.reader(tickers)
         for s in list(reader):
-            yield s[0]
+            stocks[s[0]] = s[1]
+        return stocks
+
+if __name__ == '__main__':
+    print(get_stock_ids())
