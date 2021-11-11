@@ -74,6 +74,6 @@ def buy_stock(id):
         current_user.money_liquid -= amount * current_value
 
         db.update_money_liquid(current_user)
-        return f'{amount} {id} stocks'
+        return f'bought/sold {amount} {id} stocks'
     except Exception as e:
         return str(e), 400

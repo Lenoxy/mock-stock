@@ -98,6 +98,11 @@ def get_stock_values(stock_ids: list) -> dict[float]:
     return {stock_data[0]: stock_data[1].iloc[0] for stock_data in data.items()}
 
 
+def apply_transactions(history: dict[float], transactions: list[Transaction], amount_now: float = 0) -> dict[float]:
+    for key in history:
+        pass
+
+
 if __name__ == '__main__':
     print(get_stock_values(['aapl','goog','MMM']))
 

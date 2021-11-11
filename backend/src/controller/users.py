@@ -9,13 +9,15 @@ users = Blueprint('users', __name__)
 def get_users():
     users = db.get_users()
     stock_ids = []
+    stock_values = {}
     for user in users:
         user.owned_stocks = db.get_owned_stocks(user.username)
         for stock in user.owned_stocks:
             if not stock in stock_ids:
                 stock_ids.append(stock)
 
-    stock_values = finance.get_stock_values(stock_ids)
+    if len(stock_ids) == 1:
+        stock_values = finance.get_stock_values(stock_ids)
 
     for user in users:
         for stock in user.owned_stocks:
