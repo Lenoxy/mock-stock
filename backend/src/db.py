@@ -1,5 +1,5 @@
 import csv
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 import mongodb
 from models import User, OwnedStock, Transaction
@@ -44,14 +44,13 @@ def create_user(user: User) -> User:
 
 
 # Transactions
-def get_transactions(user: User) -> list[Transaction]:
-    since_date = date.today() - timedelta(days=5)
+def get_transactions(username: str) -> list[Transaction]:
+    since_date = (date.today() - timedelta(days=5)).isoformat()
 
     transaction_collection = mongodb.mongo_client.transaction
     transactions = mongodb.find(transaction_collection)
-    print(transactions[0].username)
 
-    return filter(lambda t: t.username == user.username and t.date >= since_date, transactions)
+    return filter(lambda t: t.username == username and t.datetime >= since_date, transactions)
 
 
 def create_transaction(transaction: Transaction) -> Transaction:
@@ -75,11 +74,19 @@ def update_owned_stock(owned_stock: OwnedStock) -> OwnedStock:
     owned_stock_collection = mongodb.mongo_client.owned_stock
     existing_stock = owned_stock_collection.find_one(filter)
 
+    transaction = Transaction()
+    transaction.username = owned_stock.username
+    transaction.amount = owned_stock.amount
+    transaction.datetime = datetime.now().isoformat()
+    transaction.stock_id = owned_stock.id
+
+
     # If stock isn't in DB yet
     if not existing_stock:
         if owned_stock.amount < 0:
             raise Exception("You goin' below zero dude, can't do that")
         owned_stock_collection.insert_one(owned_stock.to_dict())
+        create_transaction(transaction)
         return owned_stock
 
     existing_stock = OwnedStock(existing_stock)
@@ -89,9 +96,12 @@ def update_owned_stock(owned_stock: OwnedStock) -> OwnedStock:
 
     if existing_stock.amount + owned_stock.amount == 0:
         owned_stock_collection.remove(filter)
+        create_transaction(transaction)
+        return existing_stock
 
     # add to existing stock
     owned_stock_collection.update_one(filter, {"$set": {'amount': existing_stock.amount + owned_stock.amount}})
+    create_transaction(transaction)
     return existing_stock
 
 
