@@ -10,7 +10,7 @@ import {PurchaseComponent} from "./components/purchase/purchase.component";
 import {SellComponent} from "./components/sell/sell.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/register', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'user/:id', component: ProfileComponent },

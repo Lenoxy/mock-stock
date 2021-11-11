@@ -1,17 +1,19 @@
 from flasgger import Swagger
 from flask import Flask
 from flask_login import LoginManager
+from flask_cors import CORS
 import db
 import mongodb
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 
     swagger = Swagger(app)
     swagger.load_swagger_file('openapi.yaml')
 
     add_flask_login(app)
-    
+
     # Add Endpoints / Resources from Controller to app
     from controller.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)

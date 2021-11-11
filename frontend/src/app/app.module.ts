@@ -19,6 +19,7 @@ import {PasswordModule} from 'primeng/password';
 import {FormsModule} from "@angular/forms";
 import {InputTextModule} from 'primeng/inputtext';
 import {CardModule} from 'primeng/card';
+import {HttpClientModule} from "@angular/common/http";
 
 
 
@@ -45,7 +46,8 @@ import {CardModule} from 'primeng/card';
     PasswordModule,
     FormsModule,
     InputTextModule,
-    CardModule
+    CardModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
