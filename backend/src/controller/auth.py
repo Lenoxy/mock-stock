@@ -2,6 +2,7 @@ from hashlib import sha512
 
 import db
 import flask
+import flask_cors
 from flask import Blueprint, request
 from flask_login import login_user, logout_user, login_required
 from models import User

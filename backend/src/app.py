@@ -7,7 +7,7 @@ import mongodb
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+    CORS(app=app, supports_credentials=True)
 
     swagger = Swagger(app)
     swagger.load_swagger_file('openapi.yaml')
