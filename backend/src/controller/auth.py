@@ -1,17 +1,20 @@
-from flask import Blueprint, request
-from flask_login import login_user, logout_user, login_required, current_user
-import db
 from hashlib import sha512
+
+import db
+import flask
+from flask import Blueprint, request
+from flask_login import login_user, logout_user, login_required
 from models import User
 
 auth = Blueprint('auth', __name__)
+
 
 @auth.route("/auth/register", methods=['POST'])
 def register_user():
     auth_request = request.json
 
     username = auth_request.get('username')
-    password = auth_request.get('password') 
+    password = auth_request.get('password')
 
     try:
         user = User()
@@ -25,7 +28,7 @@ def register_user():
 
     except Exception as e:
         print(e)
-        return str(e), 400
+        return flask.Response(response=str(e), status=400, headers={'Access-Control-Allow-Credentials': True})
 
 
 @auth.route("/auth/login", methods=['POST'])
