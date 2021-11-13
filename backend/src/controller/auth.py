@@ -29,7 +29,7 @@ def register_user():
 
     except Exception as e:
         print(e)
-        return flask.Response(response=str(e), status=400, headers={'Access-Control-Allow-Credentials': True})
+        return flask.Response(response=str(e), status=400)
 
 
 @auth.route("/auth/login", methods=['POST'])
