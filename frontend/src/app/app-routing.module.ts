@@ -8,11 +8,12 @@ import {StockListComponent} from "./components/stock-list/stock-list.component";
 import {StockDetailComponent} from "./components/stock-detail/stock-detail.component";
 import {PurchaseComponent} from "./components/purchase/purchase.component";
 import {SellComponent} from "./components/sell/sell.component";
+import {AuthGuard} from "./services/auth/auth.guard";
 
 const routes: Routes = [
-  { path: '', redirectTo: '/register', pathMatch: 'full' },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: '/stock-list', pathMatch: 'full' },
+  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
   { path: 'user/:id', component: ProfileComponent },
   { path: 'stock-list', component: StockListComponent },
   { path: 'stock-detail/:id', component: StockDetailComponent },

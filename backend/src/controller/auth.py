@@ -2,9 +2,8 @@ from hashlib import sha512
 
 import db
 import flask
-import flask_cors
 from flask import Blueprint, request
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from models import User
 
 auth = Blueprint('auth', __name__)
@@ -25,7 +24,7 @@ def register_user():
         user = db.create_user(user)
         login_user(user)
 
-        return 'User registered and logged in'
+        return flask.Response(response='User registered and logged in', status=200)
 
     except Exception as e:
         print(e)
@@ -54,3 +53,8 @@ def post_login():
 def get_logout():
     logout_user()
     return 'Succesfully logged out', 200
+
+
+@auth.route("/auth/isloggedin", methods=['GET'])
+def get_is_logged_in():
+    return flask.Response(response=str(current_user.is_authenticated), status=200)

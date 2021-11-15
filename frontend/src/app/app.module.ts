@@ -20,6 +20,8 @@ import {FormsModule} from "@angular/forms";
 import {InputTextModule} from 'primeng/inputtext';
 import {CardModule} from 'primeng/card';
 import {HttpClientModule} from "@angular/common/http";
+import {DialogModule} from 'primeng/dialog';
+
 
 
 
@@ -47,7 +49,8 @@ import {HttpClientModule} from "@angular/common/http";
     FormsModule,
     InputTextModule,
     CardModule,
-    HttpClientModule
+    HttpClientModule,
+    DialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

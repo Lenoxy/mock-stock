@@ -6,7 +6,7 @@
     </div>
 
     <div class="form-input">
-    <div class="p-mb-3 p-text-left">Password:</div>
+    <div class="p-mb-3 p-text-left">Password (min 8 characters):</div>
     <p-password [(ngModel)]="password" [feedback]="false"></p-password>
     </div>
 
@@ -17,3 +17,12 @@
 
     <p-button label="Register" (click)="register()"></p-button>
 </p-card>
+
+
+<p-dialog header="Dialog" [(visible)]="dialogVisible" [breakpoints]="{'960px': '75vw'}" [style]="{width: '50vw'}"
+          [draggable]="false" [resizable]="false">
+  <p>{{responseMessage}}</p>
+  <ng-template pTemplate="footer">
+    <p-button (click)="dialogVisible=false" label="Ok" styleClass="p-button-text"></p-button>
+  </ng-template>
+</p-dialog>
