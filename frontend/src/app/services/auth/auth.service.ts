@@ -23,7 +23,6 @@ export class AuthService {
 
 
   public async logout(): Promise<HttpResponse<any>> {
-
     return await this.http.post(environment.host + "auth/logout", {}, {
       responseType: 'text',
       withCredentials: true,
@@ -31,7 +30,7 @@ export class AuthService {
     }).toPromise()
   }
 
-  public async isLoggedin(): Promise<any> {
+  public async isLoggedin(): Promise<HttpResponse<any>> {
     return await this.http.get(environment.host + 'auth/isloggedin',{responseType: 'text',
       withCredentials: true,
       observe: "response"}).toPromise()

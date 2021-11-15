@@ -41,6 +41,6 @@ export class RegisterComponent implements OnInit {
 
 
     this.dialogVisible = true;
-
+    location.reload()
   }
 }

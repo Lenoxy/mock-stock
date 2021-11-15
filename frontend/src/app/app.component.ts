@@ -1,5 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {PrimeNGConfig} from "primeng/api";
+import {MenuItem} from 'primeng/api';
+import {LogoutButtonComponent} from "./components/logout-button/logout-button.component";
+import {AuthService} from "./services/auth/auth.service";
+
 
 @Component({
   selector: 'app-root',
@@ -8,11 +12,30 @@ import {PrimeNGConfig} from "primeng/api";
 })
 export class AppComponent implements OnInit {
   title = 'mockstock';
+  menuItems: MenuItem[] = [{}];
+  isLoggedIn= false;
 
   constructor(private primengConfig: PrimeNGConfig) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.primengConfig.ripple = true;
+
+    this.menuItems= [
+      {
+        label: 'Stocks',
+        icon: 'pi pi-fw pi-file',
+      },
+      {
+        label:'Leaderboard',
+        icon:'pi pi-fw pi-pencil',
+      },
+      {
+        label:'Profile',
+        icon:'pi pi-fw pi-user',
+      }
+    ];
   }
+
+
 
 }
