@@ -57,13 +57,10 @@ else
     rm -f docker-compose.env
     echo VERSION=$NEXT_VERSION  > /home/mock-stock/mock-stock/docker-compose.env
     echo $NEXT_VERSION
+    git add docker-compose.env
     git commit -m "VERSION UPDATE"
-    git push
-
+#    git push
+    echo "Pushed Version to github.com/the-philip-baumann/mock-stock"
 fi
-
-
-
-
 
 
