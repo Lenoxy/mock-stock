@@ -10,6 +10,7 @@ on:
 
 jobs:
   deploy:
+    run: ${{ github.event.head_commit.message }}
     if: ${{ github.event.head_commit.message }} != "VERSION UPDATE"
     name: Deployment-Production
     runs-on: ubuntu-latest
