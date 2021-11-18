@@ -18,6 +18,11 @@ docker-compose --env-file docker-compose.env down
 git reset --hard
 git pull origin master
 
+cd frontend
+npm install
+npm run build
+cd ..
+
 docker-compose --env-file docker-compose.env up -d --build --force-recreate
 
 CURRENT_VERSION="$(grep "VERSION=" /home/mock-stock/mock-stock/docker-compose.env | cut -d '=' -f 2)"
