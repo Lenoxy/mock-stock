@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from "../../services/auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -7,9 +9,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  username = ''
+  password = ''
+  dialogVisible = false;
+  responseMessage = 'Check your inputs!'
+
+
+  constructor(private auth: AuthService,
+              private router: Router) {
+  }
 
   ngOnInit(): void {
   }
 
+  async login() {
+    try {
+      await this.auth.login(this.username, this.password);
+        await this.router.navigate(['/stock-list'])
+        location.reload()
+    } catch {
+      this.dialogVisible = true;
+    }
+
+  }
+
+  async redirectToRegister() {
+    await this.router.navigate(['/register'])
+  }
 }

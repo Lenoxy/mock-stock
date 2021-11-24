@@ -36,4 +36,10 @@ export class AuthService {
       observe: "response"}).toPromise()
   }
 
+  public async login(username: string, password: string): Promise<HttpResponse<any>> {
+    return await this.http.post(environment.host + 'auth/login',
+      {username, password},
+      {responseType: 'text', withCredentials: true, observe: "response"}).toPromise();
+  }
+
 }

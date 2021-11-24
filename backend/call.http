@@ -17,6 +17,9 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5000/stocks
+GET http://localhost:5000/stocks?top=5
+
+###
+GET http://localhost:5000/stocks/AACG
 
 

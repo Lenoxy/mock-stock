@@ -21,8 +21,9 @@ import {InputTextModule} from 'primeng/inputtext';
 import {CardModule} from 'primeng/card';
 import {HttpClientModule} from "@angular/common/http";
 import {DialogModule} from 'primeng/dialog';
-import { LogoutButtonComponent } from './components/logout-button/logout-button.component';
+import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import {MenubarModule} from 'primeng/menubar';
+import {ChartModule} from 'primeng/chart';
 
 
 
@@ -39,7 +40,7 @@ import {MenubarModule} from 'primeng/menubar';
     PurchaseComponent,
     SellComponent,
     StockListComponent,
-    LogoutButtonComponent,
+    AuthButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,6 +56,8 @@ import {MenubarModule} from 'primeng/menubar';
     HttpClientModule,
     DialogModule,
     MenubarModule,
+    ChartModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

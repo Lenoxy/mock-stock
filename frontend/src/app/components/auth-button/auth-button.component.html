@@ -1,0 +1,8 @@
+
+<div *ngIf="isloggedIn; else elseBlock">
+  <p-button  label="Logout" (click)="logout()"></p-button>
+</div>
+<ng-template #elseBlock>
+  <p-button label="Login" (click)="redirectToLogin()"></p-button>
+</ng-template>
+

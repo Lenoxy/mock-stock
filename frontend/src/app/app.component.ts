@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PrimeNGConfig} from "primeng/api";
 import {MenuItem} from 'primeng/api';
-import {LogoutButtonComponent} from "./components/logout-button/logout-button.component";
+import {AuthButtonComponent} from "./components/auth-button/auth-button.component";
 import {AuthService} from "./services/auth/auth.service";
 
 

@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
   username = '';
   password = '';
   repeatPassword = '';
-  responseMessage = '';
+  responseMessage = 'Check your inputs!';
   dialogVisible = false;
 
   constructor(private authService: AuthService,
@@ -31,15 +31,13 @@ export class RegisterComponent implements OnInit {
   async register(): Promise<void> {
     if(await this.isPasswordMatch()) {
       const response = await this.authService.register(this.username, this.password);
-      this.responseMessage = response.body
       if(response.status == 200) {
           await this.router.navigate(['/stock-list'])
+          location.reload();
       }
     } else {
-      this.responseMessage = 'Check your inputs!'
+      this.dialogVisible = true;
     }
 
-
-    this.dialogVisible = true;
   }
 }

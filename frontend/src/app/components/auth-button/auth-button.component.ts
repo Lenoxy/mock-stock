@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-logout-button',
-  templateUrl: './logout-button.component.html',
-  styleUrls: ['./logout-button.component.scss']
+  selector: 'app-auth-button',
+  templateUrl: './auth-button.component.html',
+  styleUrls: ['./auth-button.component.scss']
 })
-export class LogoutButtonComponent implements OnInit {
+export class AuthButtonComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private router: Router) { }
   isloggedIn = false
   async ngOnInit():Promise<void> {
     this.isloggedIn = await this.isAuthorized()
@@ -22,5 +24,9 @@ export class LogoutButtonComponent implements OnInit {
   async logout(): Promise<void> {
     await this.authService.logout();
     await location.reload();
+  }
+
+  async redirectToLogin() {
+    await this.router.navigate(['/login'])
   }
 }
