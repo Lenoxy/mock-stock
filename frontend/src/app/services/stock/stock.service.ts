@@ -16,4 +16,9 @@ export class StockService {
     return await this.http.get(environment.host + 'stocks/AACG',
       {responseType: 'text', observe: "response"}).toPromise();
   }
+
+  public async getStockList(skip: number, top: number): Promise<HttpResponse<any>>{
+    return JSON.parse(<string>(await this.http.get(environment.host + 'stocks?skip=' + skip + '&top=' + top,
+      {responseType: 'text', observe: "response"}).toPromise()).body);
+  }
 }
