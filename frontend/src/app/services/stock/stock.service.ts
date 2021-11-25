@@ -12,8 +12,8 @@ export class StockService {
 
   }
 
-  public async getStock(): Promise<HttpResponse<any>> {
-    return await this.http.get(environment.host + 'stocks/AACG',
+  public async getStock(id: string): Promise<HttpResponse<any>> {
+    return await this.http.get(environment.host + 'stocks/' + id,
       {responseType: 'text', observe: "response"}).toPromise();
   }
 }

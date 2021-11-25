@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {StockService} from "../../services/stock/stock.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-stock-detail',
@@ -11,10 +12,17 @@ export class StockDetailComponent implements OnInit {
   basicData: any
   basicOptions: any
   stock: any
-  constructor(private stockservice: StockService) { }
+  change = ''
+  value = ''
+  id: string | undefined
+   constructor(private stockservice: StockService, private route: ActivatedRoute) {
+  }
 
  async ngOnInit(): Promise<void> {
-    this.stock = JSON.parse((await this.stockservice.getStock()).body)
+   this.id = this.route.snapshot.paramMap.get('id')!;
+   this.stock = JSON.parse((await this.stockservice.getStock(this.id)).body)
+   this.value = this.stock.value;
+   this.change = this.stock.change;
    const historyValues = Object.values(this.stock.history)
    const historyKeys = Object.keys(this.stock.history)
     this.basicData = {
