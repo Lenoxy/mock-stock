@@ -3,7 +3,10 @@
     <ng-template pTemplate="start">
     </ng-template>
     <ng-template pTemplate="end">
-    <app-auth-button></app-auth-button>
+      <div class="flex">
+        <p  class="item" *ngIf="isLoggedIn">Balance: {{money}}$</p>
+        <app-auth-button></app-auth-button>
+      </div>
     </ng-template>>
   </p-menubar>
 </nav>

@@ -23,6 +23,7 @@ export class AuthButtonComponent implements OnInit {
 
   async logout(): Promise<void> {
     await this.authService.logout();
+    localStorage.clear();
     await location.reload();
   }
 
