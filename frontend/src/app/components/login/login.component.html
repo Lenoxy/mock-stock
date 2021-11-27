@@ -10,7 +10,7 @@
     <p-password [(ngModel)]="password" [feedback]="false"></p-password>
   </div>
 
-  <p-button label="Login" (click)="login()"></p-button>
-  <p-button class="right" label="Register" (click)="redirectToRegister()"></p-button>
+  <button mat-raised-button  color="primary" (click)="login()">Login</button>
+  <button mat-stroked-button color="accent" class="right" (click)="redirectToRegister()">Register</button>
 </p-card>
 

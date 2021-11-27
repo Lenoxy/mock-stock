@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 import {Router} from "@angular/router";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -13,11 +14,10 @@ export class RegisterComponent implements OnInit {
   username = '';
   password = '';
   repeatPassword = '';
-  responseMessage = 'Check your inputs!';
-  dialogVisible = false;
 
   constructor(private authService: AuthService,
-              private router: Router
+              private router: Router,
+              private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
           location.reload();
       }
     } else {
-      this.dialogVisible = true;
+      this.snackBar.open("Your credentials are invalid")
     }
 
   }

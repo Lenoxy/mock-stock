@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
         await this.router.navigate(['/stock-list'])
         location.reload()
     } catch {
-      this.snackBar.open("Check your inputs!")
+      this.snackBar.open("Your credentials do not match our records")
     }
 
   }
