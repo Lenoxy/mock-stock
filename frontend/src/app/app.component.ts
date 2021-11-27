@@ -30,14 +30,17 @@ export class AppComponent implements OnInit {
       {
         label: 'Stocks',
         icon: 'pi pi-fw pi-file',
+        routerLink: 'stock-list'
       },
       {
         label:'Leaderboard',
         icon:'pi pi-fw pi-pencil',
+        routerLink: 'leaderboard'
       },
       {
         label:'Profile',
         icon:'pi pi-fw pi-user',
+        routerLink: 'profile'
       }
     ];
   }

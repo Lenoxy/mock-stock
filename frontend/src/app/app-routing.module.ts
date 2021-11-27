@@ -19,7 +19,8 @@ const routes: Routes = [
   { path: 'stock-detail/:id', component: StockDetailComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
   { path: 'purchase/:id', component: PurchaseComponent },
-  { path: 'sell/:id', component: SellComponent }
+  { path: 'sell/:id', component: SellComponent },
+  { path: 'profile', component: ProfileComponent }
 ];
 
 @NgModule({
