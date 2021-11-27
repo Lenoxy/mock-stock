@@ -27,6 +27,8 @@ import {ChartModule} from 'primeng/chart';
 import {MatTableModule} from '@angular/material/table';
 import {CommonModule} from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatButtonModule} from '@angular/material/button';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -59,7 +61,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     ChartModule,
     MatTableModule,
     CommonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatSnackBarModule
 
   ],
   providers: [],

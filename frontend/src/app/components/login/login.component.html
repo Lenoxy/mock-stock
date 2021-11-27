@@ -14,11 +14,3 @@
   <p-button class="right" label="Register" (click)="redirectToRegister()"></p-button>
 </p-card>
 
-
-<p-dialog header="Dialog" [(visible)]="dialogVisible" [breakpoints]="{'960px': '75vw'}" [style]="{width: '50vw'}"
-          [draggable]="false" [resizable]="false">
-  <p>{{responseMessage}}</p>
-  <ng-template pTemplate="footer">
-    <p-button (click)="dialogVisible=false" label="Ok" styleClass="p-button-text"></p-button>
-  </ng-template>
-</p-dialog>
