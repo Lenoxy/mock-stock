@@ -1,22 +1,27 @@
-<table mat-table [dataSource]="stocks" class="mat-elevation-z8" *ngIf="stocks">
+<table mat-table [dataSource]="stocks" class="mat-elevation-z8" *ngIf="stocks && !loading">
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    <td mat-cell *matCellDef="let stock"> {{stock.id}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="name">
+  <ng-container matColumnDef="name" class="name-col">
     <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    <td mat-cell *matCellDef="let stock"> {{stock.name}} </td>
   </ng-container>
 
   <ng-container matColumnDef="change">
     <th mat-header-cell *matHeaderCellDef>Change</th>
-    <td mat-cell *matCellDef="let element"> {{element.change | number:'0.2-2'}}% </td>
+    <td mat-cell *matCellDef="let stock">
+      <div *ngIf="stock.change">{{stock.change | number:'0.2-2' }}%</div>
+      <span *ngIf="!stock.change">-</span></td>
   </ng-container>
 
   <ng-container matColumnDef="value">
     <th mat-header-cell *matHeaderCellDef>Value</th>
-    <td mat-cell *matCellDef="let element"> {{element.value | number:'0.2-2'}} </td>
+    <td mat-cell *matCellDef="let stock">
+      <span *ngIf="stock.value">{{stock.value | number:'0.0-2'}}</span>
+      <span *ngIf="!stock.value">-</span>
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -24,7 +29,10 @@
     mat-row
     (click)="onRowClick(row)"
     *matRowDef="let row; columns: displayedColumns;"
-  ></tr></table>
-<div id="spinner-container" *ngIf="!stocks"><mat-spinner></mat-spinner></div>
-<button mat-button (click)="gotoPrevious()">Previous</button>
-<button mat-button (click)="gotoNext()">Next</button>
+  ></tr>
+</table>
+<div id="spinner-container" *ngIf="!stocks || loading">
+  <mat-spinner></mat-spinner>
+</div>
+<button mat-stroked-button (click)="gotoPrevious()" class="page-button">Previous</button>
+<button mat-stroked-button (click)="gotoNext()" class="page-button">Next</button>

@@ -20,19 +20,24 @@ export class StockListComponent implements OnInit {
   }
 
   stocks: any;
+  loading = false; // Used only for loading next page, not initial loading
   displayedColumns: string[] = ['id', 'name', 'change', 'value'];
   private _page: any = 1;
 
   async ngOnInit() {
-    this.page = this.route.snapshot.paramMap.get('page') ? this.route.snapshot.paramMap.get('page') : 1;
+    this.route.queryParams
+      .subscribe(params => {
+          this.page = params.page;
+        }
+      );
     await this.loadTable()
   }
 
   async loadTable() {
-    console.log((this.page - 1) * 25, ((this.page - 1) * 25) + 25)
+    this.loading = true;
     console.log("page is", this.page)
     this.stocks = await this.stockService.getStockList((this.page - 1) * 25, ((this.page - 1) * 25) + 24);
-    console.log(this.stocks)
+    this.loading = false;
   }
 
 
