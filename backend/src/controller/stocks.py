@@ -49,6 +49,9 @@ def get_stocks():
             if isNaN(stock.change):
                 stock.change = None
 
+            if isNaN(stock.value):
+                stock.value = None
+
             serialized_stocks.append(stock.to_dict())
 
         return jsonify(serialized_stocks)

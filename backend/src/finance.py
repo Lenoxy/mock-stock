@@ -62,6 +62,7 @@ def get_stocks(stock_ids: list[str]) -> list[Stock]:
             before = stock_data[1].iloc[0]
             now = stock_data[1].iloc[1]
             stock.change = (now / before - 1) * 100
+            print(before, now)
 
             stocks.append(stock)
 

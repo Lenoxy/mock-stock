@@ -115,4 +115,4 @@ def get_stock_ids() -> dict[str]:
         return stocks
 
 if __name__ == '__main__':
-    print(get_stock_ids())
+    pass
