@@ -26,3 +26,5 @@
     *matRowDef="let row; columns: displayedColumns;"
   ></tr></table>
 <div id="spinner-container" *ngIf="!stocks"><mat-spinner></mat-spinner></div>
+<button mat-button (click)="gotoPrevious()">Previous</button>
+<button mat-button (click)="gotoNext()">Next</button>
