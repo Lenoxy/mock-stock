@@ -99,8 +99,12 @@ def get_stock_values(stock_ids: list) -> dict[float]:
 
 
 def apply_transactions(history: dict[float], transactions: list[Transaction], amount_now: float = 0) -> dict[float]:
+    
+    trans_dict = {trans.datetime: trans for trans in transactions}
+
     for key in history:
-        pass
+        if history[key] >= trans_dict[key]:
+            pass
 
 
 if __name__ == '__main__':

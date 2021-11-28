@@ -9,6 +9,10 @@ from models import OwnedStock
 stocks = Blueprint('stocks', __name__)
 
 
+def isNaN(num):
+    return num!= num
+
+
 @stocks.route("/stocks")
 def get_stocks():
     try:
@@ -39,7 +43,16 @@ def get_stocks():
                 if stock.id in owned_stocks:
                     stock.amount = owned_stocks[stock.id].amount
 
-        return jsonify([stock.to_dict() for stock in local_stocks])
+        serialized_stocks = []
+
+        for stock in local_stocks:
+            if isNaN(stock.change):
+                stock.change = None
+
+            serialized_stocks.append(stock.to_dict())
+
+        return jsonify(serialized_stocks)
+
     except Exception as e:
         return str(e), 400
 
