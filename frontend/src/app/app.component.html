@@ -4,10 +4,11 @@
     </ng-template>
     <ng-template pTemplate="end">
       <div class="flex">
-        <p  class="item" *ngIf="isLoggedIn">Balance: {{money}}$</p>
+        <p class="item" *ngIf="isLoggedIn && money">Balance: {{ money | currency: "USD" : "symbol" : "0.0-2" }}</p>
         <app-auth-button></app-auth-button>
       </div>
-    </ng-template>>
+    </ng-template>
+    >
   </p-menubar>
 </nav>
 <router-outlet></router-outlet>

@@ -29,6 +29,7 @@ import {CommonModule} from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatCardModule} from '@angular/material/card';
 
 
 @NgModule({
@@ -44,28 +45,29 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     StockListComponent,
     AuthButtonComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    ButtonModule,
-    AvatarModule,
-    TableModule,
-    PasswordModule,
-    FormsModule,
-    InputTextModule,
-    CardModule,
-    HttpClientModule,
-    DialogModule,
-    MenubarModule,
-    ChartModule,
-    MatTableModule,
-    CommonModule,
-    MatProgressSpinnerModule,
-    MatButtonModule,
-    MatSnackBarModule
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        ButtonModule,
+        AvatarModule,
+        TableModule,
+        PasswordModule,
+        FormsModule,
+        InputTextModule,
+        CardModule,
+        HttpClientModule,
+        DialogModule,
+        MenubarModule,
+        ChartModule,
+        MatTableModule,
+        CommonModule,
+        MatProgressSpinnerModule,
+        MatButtonModule,
+        MatSnackBarModule,
+        MatCardModule
 
-  ],
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
