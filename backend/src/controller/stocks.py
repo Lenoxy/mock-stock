@@ -1,9 +1,9 @@
+from datetime import datetime
 from flask_login import login_required, current_user
 from flask import Blueprint, request, jsonify
-from flask_login.mixins import AnonymousUserMixin
 import finance
 import db
-from models import OwnedStock
+from models import OwnedStock, Transaction
 
 
 stocks = Blueprint('stocks', __name__)
@@ -86,7 +86,15 @@ def buy_stock(id):
         if current_user.money_liquid < amount * current_value:
             raise Exception("You can't afford that xD, you broke af dude...")
 
+        transaction = Transaction()
+        transaction.username = current_user.username
+        transaction.amount = amount
+        transaction.datetime = datetime.now().isoformat()
+        transaction.stock_id = id
+        transaction.stock_price = current_value
+
         db.update_owned_stock(OwnedStock({'username': current_user.username, 'id': id, 'amount': amount}))
+        db.create_transaction(transaction)
         current_user.money_liquid -= amount * current_value
 
         db.update_money_liquid(current_user)

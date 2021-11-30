@@ -5,9 +5,11 @@ class Transaction():
             self.datetime = transaction['datetime']
             self.stock_id = transaction['stock_id']
             self.amount = transaction['amount']
+            self.stock_price = transaction['stock_price']
 
     def to_dict(self):
         return {'username': self.username,
                 'datetime': self.datetime,
                 'stock_id': self.stock_id,
-                'amount': self.amount}
+                'amount': self.amount,
+                'stock_price': self.stock_price}

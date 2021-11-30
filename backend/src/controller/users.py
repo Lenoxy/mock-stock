@@ -36,7 +36,37 @@ def get_user(username):
 
         owned_stocks = db.get_owned_stocks(username)
         if owned_stocks:
-            stock_ids = [key for _, key in enumerate(owned_stocks)]
+            stock_ids = [key for key in owned_stocks]
+            stocks = finance.get_stocks(stock_ids)
+            for stock in stocks:
+                stock.amount = owned_stocks[stock.id].amount
+                money_in_stocks += stock.amount * stock.value
+
+            user.stocks = [stock.to_dict() for stock in stocks]
+
+        user.money_in_stocks = money_in_stocks
+        return user.to_dict()
+
+    except Exception as e:
+        return str(e), 400
+
+
+@users.route("/users/<string:username>/histories")
+def get_user(username):
+    try:
+        user = db.get_user(username)
+
+        owned_stocks = db.get_owned_stocks(username)
+        transactions = db.get_transactions(username)
+
+        dummy_history = finance.get_stock_with_history('AAPL').history
+
+        for time_stamp in dummy_history:
+
+            pass
+        
+        if owned_stocks:
+            stock_ids = [key for key in owned_stocks]
             stocks = finance.get_stocks(stock_ids)
             for stock in stocks:
                 stock.amount = owned_stocks[stock.id].amount

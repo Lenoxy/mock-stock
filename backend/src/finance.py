@@ -1,9 +1,6 @@
-from pandas._libs.tslibs.timestamps import Timestamp
-from pymongo.common import raise_config_error
 import db
 from models import Transaction, Stock
 import yfinance as yf
-from datetime import datetime, timedelta
 
 
 stock_dict = db.get_stock_ids()
@@ -101,13 +98,24 @@ def get_stock_values(stock_ids: list) -> dict[float]:
 
 def apply_transactions(history: dict[float], transactions: list[Transaction], amount_now: float = 0) -> dict[float]:
     
-    trans_dict = {trans.datetime: trans for trans in transactions}
+    transactions.sort(key=lambda t: t.datetime, reverse=True)
+    history = sorted(history, key=lambda h: h, reverse=True)
 
-    for key in history:
-        if history[key] >= trans_dict[key]:
-            pass
+    res_dict: dict[float] = {}
+
+    i = 0
+    for time_stamp in history:
+        if time_stamp > transactions[i]:
+            res_dict[time_stamp] = history[time_stamp] * amount_now
+        else:
+            amount_now = amount_now - transactions[i].amount
+            res_dict[time_stamp] = history[time_stamp] * amount_now
+            i += 1
+
+    return res_dict
+    
 
 
 if __name__ == '__main__':
-    print(get_stock_values(['aapl','goog','MMM']))
+    print(apply_transactions({}))
 
