@@ -13,15 +13,15 @@ def get_users():
     for user in users:
         user.owned_stocks = db.get_owned_stocks(user.username)
         for stock in user.owned_stocks:
-            if not stock in stock_ids:
-                stock_ids.append(stock)
+            if not stock.upper() in stock_ids:
+                stock_ids.append(stock.upper())
 
     if len(stock_ids) == 1:
         stock_values = finance.get_stock_values(stock_ids)
 
     for user in users:
         for stock in user.owned_stocks:
-            user.money_in_stocks += user.owned_stocks[stock].amount * stock_values[stock]
+            user.money_in_stocks += user.owned_stocks[stock].amount * stock_values[stock.upper()]
 
     users = sorted(users, key=lambda user: user.money_in_stocks + user.money_liquid, reverse=True)
 

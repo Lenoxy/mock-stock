@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {StockService} from '../../services/stock/stock.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-stock-list',
@@ -8,20 +8,53 @@ import {Router} from '@angular/router';
   styleUrls: ['./stock-list.component.scss']
 })
 export class StockListComponent implements OnInit {
+  get page(): any {
+    return this._page;
+  }
 
-  constructor(private stockService: StockService, private router: Router) { }
+  set page(value: any) {
+    value > 1 ? this._page = value : this._page = 1;
+  }
+
+  constructor(private stockService: StockService, private router: Router, private route: ActivatedRoute) {
+  }
 
   stocks: any;
+  loading = false; // Used only for loading next page, not initial loading
   displayedColumns: string[] = ['id', 'name', 'change', 'value'];
+  private _page: any = 1;
 
   async ngOnInit() {
-    this.stocks = await this.stockService.getStockList(0, 20);
-    console.log(this.stocks)
+    this.route.queryParams
+      .subscribe(params => {
+          this.page = params.page;
+        }
+      );
+    await this.loadTable()
+  }
+
+  async loadTable() {
+    this.loading = true;
+    console.log("page is", this.page)
+    this.stocks = await this.stockService.getStockList((this.page - 1) * 25, ((this.page - 1) * 25) + 24);
+    this.loading = false;
   }
 
 
-  onRowClick(row: any) {
-    console.log(row.id)
-    this.router.navigateByUrl('stock-detail/' + row.id)
+  async onRowClick(row: any) {
+    await this.router.navigateByUrl('stock-detail/' + row.id)
+  }
+
+  async gotoPrevious() {
+    this.page--;
+    await this.router.navigateByUrl('stock-list?page=' + this.page);
+    await this.loadTable()
+  }
+
+  async gotoNext() {
+    console.log(this.page)
+    this.page++;
+    await this.router.navigateByUrl('stock-list?page=' + this.page);
+    await this.loadTable()
   }
 }

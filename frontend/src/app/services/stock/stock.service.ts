@@ -9,7 +9,6 @@ import {environment} from "../../../environments/environment";
 export class StockService {
 
   constructor(private http: HttpClient) {
-
   }
 
   public async getStock(id: string): Promise<HttpResponse<any>> {

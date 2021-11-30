@@ -1,16 +1,17 @@
 from datetime import datetime
 from flask_login import login_required, current_user
 from flask import Blueprint, request, jsonify
-import finance
-import db
 from models import OwnedStock, Transaction
+import finance
+import math
+import db
 
 
 stocks = Blueprint('stocks', __name__)
 
 
 def isNaN(num):
-    return num!= num
+    return math.isnan(num)
 
 
 @stocks.route("/stocks")
@@ -29,8 +30,8 @@ def get_stocks():
                 skip = int(skip)
 
             stock_list = list(db.get_stock_ids())
-            local_stocks = finance.get_stocks(stock_list[skip:top+skip])
-                
+            local_stocks = finance.get_stocks(stock_list[skip:top + skip])
+
         else:
             stock_list = list(db.get_stock_ids())
             local_stocks = finance.get_stocks(stock_list)

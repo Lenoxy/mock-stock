@@ -1,1 +1,25 @@
-<p>profile works!</p>
+<div id="profile-component" *ngIf="data">
+  <h1>{{ data.username }}</h1>
+  <mat-card class="money-flex">
+    <mat-card class="money-flex-item">
+      <h2>Score</h2>
+      <p>{{ data.score | number :"0.0-2" }}</p>
+    </mat-card>
+    <mat-card class="money-flex-item">
+      <h2>Liquid money</h2>
+      <p>{{ data.money_liquid | currency: "USD" : "symbol" : "0.0-2"}}</p>
+    </mat-card>
+    <mat-card class="money-flex-item">
+      <h2>In Stocks</h2>
+      <p>{{ data.money_in_stocks | currency: "USD" : "symbol" : "0.0-2"}}</p>
+    </mat-card>
+  </mat-card>
+  <mat-card>
+
+  </mat-card>
+
+
+</div>
+<div id="spinner-container" *ngIf="!data">
+  <mat-spinner></mat-spinner>
+</div>
