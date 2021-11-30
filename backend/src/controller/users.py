@@ -52,7 +52,7 @@ def get_user(username):
 
 
 @users.route("/users/<string:username>/histories")
-def get_user(username):
+def get_user_stocks(username):
     try:
         user = db.get_user(username)
 
@@ -70,12 +70,10 @@ def get_user(username):
             stocks = finance.get_stocks(stock_ids)
             for stock in stocks:
                 stock.amount = owned_stocks[stock.id].amount
-                money_in_stocks += stock.amount * stock.value
 
             user.stocks = [stock.to_dict() for stock in stocks]
 
-        user.money_in_stocks = money_in_stocks
-        return user.to_dict()
+        return jsonify(transactions)
 
     except Exception as e:
         return str(e), 400
