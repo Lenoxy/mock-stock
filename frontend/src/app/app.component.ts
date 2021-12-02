@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
 
   async getUserMoney(): Promise<void> {
     if(await this.isAuthorized()) {
-      let response = (await this.userService.getUser()).body
+      let response = (await this.userService.getUser()).body.replace(/\bNaN\b/g, "null")
       this.money = response.money_liquid;
     }
   }
