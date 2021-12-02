@@ -12,7 +12,7 @@ POST http://localhost:5000/auth/login
 Content-Type: application/json
 
 {
-  "username": "lllllll",
+  "username": "asdfghjkl",
   "password": "asdfghjkl"
 }
 
@@ -27,4 +27,8 @@ PUT http://localhost:5000/stocks/MSFT
 Content-Type: application/json
 
 { "amount": 20 }
+
+###
+GET http://localhost:5000/me
+
 
