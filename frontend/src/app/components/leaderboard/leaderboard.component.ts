@@ -17,8 +17,6 @@ export class LeaderboardComponent implements OnInit {
 
   async ngOnInit() {
     this.leaderboard = JSON.parse((await this.profileService.leaderboard()).body);
-    console.log(this.leaderboard)
-
   }
 
   async onRowClick(user: any) {

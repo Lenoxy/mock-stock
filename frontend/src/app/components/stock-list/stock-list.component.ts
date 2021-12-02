@@ -35,7 +35,6 @@ export class StockListComponent implements OnInit {
 
   async loadTable() {
     this.loading = true;
-    console.log("page is", this.page)
     this.stocks = await this.stockService.getStockList((this.page - 1) * 25, ((this.page - 1) * 25) + 24);
     this.loading = false;
   }
@@ -52,7 +51,6 @@ export class StockListComponent implements OnInit {
   }
 
   async gotoNext() {
-    console.log(this.page)
     this.page++;
     await this.router.navigateByUrl('stock-list?page=' + this.page);
     await this.loadTable()
