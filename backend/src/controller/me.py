@@ -1,3 +1,4 @@
+import math
 from threading import current_thread
 from flask import Blueprint
 from flask_login import login_required, current_user
@@ -5,6 +6,13 @@ import finance
 import db
 
 me = Blueprint('me', __name__)
+
+
+def check_nan(money_in_stocks):
+    if math.isnan(money_in_stocks):
+        return None
+    return money_in_stocks
+
 
 @me.route("/me")
 @login_required
@@ -24,7 +32,7 @@ def get_me():
             
             user.stocks = [stock.to_dict() for stock in stocks]
 
-        user.money_in_stocks = money_in_stocks
+        user.money_in_stocks = check_nan(money_in_stocks)
         
         return user.to_dict()
 
