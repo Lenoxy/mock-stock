@@ -11,8 +11,8 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  async getUserMoney(): Promise<HttpResponse<any>> {
+  async getUser(): Promise<HttpResponse<any>> {
     return await this.http.get(environment.host + 'me',
-      {withCredentials: true, observe: "response"}).toPromise()
+      {responseType: 'text', withCredentials: true, observe: "response"}).toPromise()
   }
 }

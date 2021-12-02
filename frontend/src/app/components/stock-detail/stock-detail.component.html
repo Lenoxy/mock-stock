@@ -4,3 +4,5 @@
 </div>
 <h4>Change: {{change}}</h4>
 <h4>Value: {{value}}</h4>
+<app-purchase *ngIf="isMoney && isAuthorised"></app-purchase>
+<app-sell *ngIf="isStocks && isAuthorised"></app-sell>

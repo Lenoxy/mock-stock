@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {StockService} from "../../services/stock/stock.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-purchase',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PurchaseComponent implements OnInit {
 
-  constructor() { }
+  id = ''
+
+  constructor(private stockService: StockService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.id = this.route.snapshot.paramMap.get('id')!;
+  }
+
+  async buyStock(): Promise<void> {
+    await this.stockService.buyStock(this.id)
+    location.reload()
   }
 
 }
