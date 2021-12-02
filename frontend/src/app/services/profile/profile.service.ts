@@ -23,5 +23,10 @@ export class ProfileService {
       {responseType: 'text', withCredentials: true, observe: "response"}).toPromise();
   }
 
+  public async leaderboard(): Promise<HttpResponse<any>> {
+    return await this.http.get(environment.host + "users" ,
+      {responseType: 'text', withCredentials: true, observe: "response"}).toPromise();
+  }
+
 
 }
