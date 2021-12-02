@@ -19,11 +19,16 @@ export class ProfileComponent implements OnInit {
 
   async ngOnInit() {
     this.profile = this.route.snapshot.paramMap.get('id')!;
-    console.log("Viewing: ", this.profile)
+    if (this.profile) {
+      console.log("Viewing:", this.profile);
+      this.data = JSON.parse((await this.profileService.profile(this.profile)).body);
+      this.data.username = "User " + this.data.username;
 
-    this.data = JSON.parse((await this.profileService.me()).body)
-    console.log(this.data)
-
+    } else {
+      console.log("Viewing: own profile")
+      this.data = JSON.parse((await this.profileService.me()).body)
+      console.log(this.data)
+    }
   }
 
 }

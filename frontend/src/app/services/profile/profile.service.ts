@@ -18,5 +18,10 @@ export class ProfileService {
       {responseType: 'text', withCredentials: true, observe: "response"}).toPromise();
   }
 
+  public async profile(username: string): Promise<HttpResponse<any>> {
+    return await this.http.get(environment.host + "users/" + username ,
+      {responseType: 'text', withCredentials: true, observe: "response"}).toPromise();
+  }
+
 
 }
