@@ -20,6 +20,7 @@ export class StockDetailComponent implements OnInit {
   change = ''
   value = ''
   id: string | undefined
+  amount = 0
 
    constructor(private stockservice: StockService,
                private route: ActivatedRoute,
@@ -94,6 +95,7 @@ export class StockDetailComponent implements OnInit {
   async getStockAmount(stocks: any): Promise<number>{
     for(const stock of stocks) {
       if(stock.id === this.id) {
+        this.amount = stock.amount
         return stock.amount;
       }
     }
