@@ -61,19 +61,7 @@ def get_user_stocks(username):
 
         dummy_history = finance.get_stock_with_history('AAPL').history
 
-        for time_stamp in dummy_history:
-
-            pass
-        
-        if owned_stocks:
-            stock_ids = [key for key in owned_stocks]
-            stocks = finance.get_stocks(stock_ids)
-            for stock in stocks:
-                stock.amount = owned_stocks[stock.id].amount
-
-            user.stocks = [stock.to_dict() for stock in stocks]
-
-        return jsonify(transactions)
+        return jsonify([transaction.to_dict() for transaction in transactions])
 
     except Exception as e:
         return str(e), 400
