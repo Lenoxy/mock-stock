@@ -55,6 +55,8 @@ def get_user(username):
 def get_user_stocks(username):
     try:
         user = db.get_user(username)
+        if not user:
+            return f'Could not find user: {username}', 404
 
         transactions = db.get_transactions(username)
 

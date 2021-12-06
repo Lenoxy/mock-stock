@@ -10,6 +10,8 @@ def get_user(username: str) -> User:
 
     collection = mongodb.mongo_client.user
     user = collection.find_one(filter)
+    if not user:
+        return None
     return User(user)
 
 
@@ -47,7 +49,7 @@ def get_transactions(username: str) -> list[Transaction]:
     transaction_collection = mongodb.mongo_client.transaction
     transactions = mongodb.find(transaction_collection)
 
-    return filter(transactions, lambda t: t.username == username and t.datetime >= since_date)
+    return filter(lambda t: t.username == username and t.datetime >= since_date, transactions)
 
 
 def create_transaction(transaction: Transaction) -> Transaction:
