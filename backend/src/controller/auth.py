@@ -27,7 +27,6 @@ def register_user():
         return flask.Response(response='User registered and logged in', status=200)
 
     except Exception as e:
-        print(e)
         return flask.Response(response=str(e), status=400)
 
 

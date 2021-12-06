@@ -21,8 +21,6 @@ def get_users():
 
     for user in users:
         for stock in user.owned_stocks:
-            print(stock_values)
-            print(user.owned_stocks)
             user.money_in_stocks += user.owned_stocks[stock.upper()].amount * stock_values[stock.upper()]
 
     users = sorted(users, key=lambda user: user.money_in_stocks + user.money_liquid, reverse=True)
@@ -59,7 +57,7 @@ def get_user_stocks(username):
         user = db.get_user(username)
 
         transactions = db.get_transactions(username)
-        print(transactions)
+
         transactions = sorted(transactions, key=lambda t: t.datetime, reverse=True)
 
         liquid_money_set = {}
