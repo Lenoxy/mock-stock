@@ -20,12 +20,14 @@ export class StockDetailComponent implements OnInit {
   change = ''
   value = ''
   id: string | undefined
-  amount = 0
+  ownedAmount = 0;
+  amountToManipulate = 0;
 
   constructor(private stockservice: StockService,
               private route: ActivatedRoute,
               private authService: AuthService,
-              private userService: UserService) {
+              private userService: UserService,
+              private stockService: StockService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -100,7 +102,7 @@ export class StockDetailComponent implements OnInit {
   async getStockAmount(stocks: any): Promise<number> {
     for (const stock of stocks) {
       if (stock.id === this.id) {
-        this.amount = stock.amount
+        this.ownedAmount = stock.amount
         return stock.amount;
       }
     }
@@ -110,5 +112,15 @@ export class StockDetailComponent implements OnInit {
   async hasMoney(): Promise<boolean> {
     let response = JSON.parse((await this.userService.getUser()).body.replace(/\bNaN\b/g, "null"))
     return response.money_liquid > 0
+  }
+
+  async buyStock(amount: number){
+    await this.stockService.buyStock(this.id!, amount)
+    location.reload()
+  }
+
+  async sellStock(amount: number){
+    await this.stockService.sellStock(this.id!, amount * (-1))
+    location.reload()
   }
 }
