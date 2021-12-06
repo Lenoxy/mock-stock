@@ -1,9 +1,13 @@
-
 <p-chart type="line" [data]="basicData" [options]="basicOptions"></p-chart>
 <h4>Change: {{change | number :"0.0-2" }}%</h4>
 <h4>Value: {{value | number :"0.0-2" }}$</h4>
-<h4>Owned amount: {{amount | number :"0.0-2" }}</h4>
+<h4>Owned amount: {{ownedAmount | number :"0.0-2" }}</h4>
 
-<app-purchase class="button" *ngIf="isMoney && isAuthorised"></app-purchase>
-<app-sell *ngIf="isStocks && isAuthorised"></app-sell>
+<button class="button" *ngIf="isMoney && isAuthorised" mat-stroked-button (click)="buyStock(amountToManipulate)" color="accent">Buy
+</button>
+<mat-form-field class="example-full-width" appearance="fill">
+  <input matInput type="number" min="0" step="1" [(ngModel)]="amountToManipulate">
+</mat-form-field>
+<button *ngIf="isStocks && isAuthorised" mat-stroked-button class="button" (click)="sellStock(amountToManipulate)" color="accent">Sell</button>
+
 

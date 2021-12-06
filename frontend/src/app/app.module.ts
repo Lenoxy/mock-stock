@@ -11,8 +11,6 @@ import {LoginComponent} from './components/login/login.component';
 import {LeaderboardComponent} from './components/leaderboard/leaderboard.component';
 import {StockDetailComponent} from './components/stock-detail/stock-detail.component';
 import {ProfileComponent} from './components/profile/profile.component';
-import {PurchaseComponent} from './components/purchase/purchase.component';
-import {SellComponent} from './components/sell/sell.component';
 import {StockListComponent} from './components/stock-list/stock-list.component';
 import {TableModule} from 'primeng/table';
 import {PasswordModule} from 'primeng/password';
@@ -30,6 +28,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatCardModule} from '@angular/material/card';
+import {MatInputModule} from '@angular/material/input';
 
 
 @NgModule({
@@ -40,8 +39,6 @@ import {MatCardModule} from '@angular/material/card';
     LeaderboardComponent,
     StockDetailComponent,
     ProfileComponent,
-    PurchaseComponent,
-    SellComponent,
     StockListComponent,
     AuthButtonComponent,
   ],
@@ -65,7 +62,8 @@ import {MatCardModule} from '@angular/material/card';
         MatProgressSpinnerModule,
         MatButtonModule,
         MatSnackBarModule,
-        MatCardModule
+        MatCardModule,
+        MatInputModule
 
     ],
   providers: [],

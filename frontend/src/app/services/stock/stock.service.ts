@@ -21,14 +21,12 @@ export class StockService {
       {responseType: 'text', observe: "response"}).toPromise()).body);
   }
 
-  public async buyStock(id: string): Promise<HttpResponse<any>> {
-    const amount = 1
+  public async buyStock(id: string, amount: number): Promise<HttpResponse<any>> {
     return await this.http.put(environment.host + "stocks/" + id,
       {amount}, {withCredentials: true, responseType: 'text', observe: "response"}).toPromise()
   }
 
-  public async sellStock(id: string): Promise<HttpResponse<any>> {
-    const amount = -1
+  public async sellStock(id: string, amount: number): Promise<HttpResponse<any>> {
     return await this.http.put(environment.host + "stocks/" + id,
       {amount}, {withCredentials: true, responseType: 'text', observe: "response"}).toPromise()
   }
