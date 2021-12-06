@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+from datetime import datetime
 import finance
 import db
 
@@ -16,12 +17,13 @@ def get_users():
             if not stock.upper() in stock_ids:
                 stock_ids.append(stock.upper())
 
-    if len(stock_ids) == 1:
-        stock_values = finance.get_stock_values(stock_ids)
+    stock_values = finance.get_stock_values(stock_ids)
 
     for user in users:
         for stock in user.owned_stocks:
-            user.money_in_stocks += user.owned_stocks[stock].amount * stock_values[stock.upper()]
+            print(stock_values)
+            print(user.owned_stocks)
+            user.money_in_stocks += user.owned_stocks[stock.upper()].amount * stock_values[stock.upper()]
 
     users = sorted(users, key=lambda user: user.money_in_stocks + user.money_liquid, reverse=True)
 
@@ -56,12 +58,18 @@ def get_user_stocks(username):
     try:
         user = db.get_user(username)
 
-        owned_stocks = db.get_owned_stocks(username)
         transactions = db.get_transactions(username)
+        print(transactions)
+        transactions = sorted(transactions, key=lambda t: t.datetime, reverse=True)
 
-        dummy_history = finance.get_stock_with_history('AAPL').history
+        liquid_money_set = {}
+        liquid_money_set[datetime.now().isoformat()] = user.money_liquid
+        for t in transactions:
+            liquid_money_set[t.datetime] = user.money_liquid + t.amount * t.stock_price
+            user.money_liquid += t.amount * t.stock_price
 
-        return jsonify([transaction.to_dict() for transaction in transactions])
+        return jsonify(liquid_money_set)
+
 
     except Exception as e:
         return str(e), 400

@@ -88,7 +88,7 @@ def get_stock_values(stock_ids: list) -> dict[float]:
         return {stock_ids[0]: get_stock_value(stock_ids[0])}
 
     data = yf.download( tickers=stock_ids, period="1d", interval="1d")['Close']
-    return {stock_data[0]: stock_data[1].iloc[0] for stock_data in data.items()}
+    return {stock_data[0].upper(): stock_data[1].iloc[0] for stock_data in data.items()}
 
 
 def apply_transactions(history: dict[float], transactions: list[Transaction], amount_now: float = 0) -> dict[float]:
