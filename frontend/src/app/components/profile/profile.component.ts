@@ -24,9 +24,7 @@ export class ProfileComponent implements OnInit {
     if (this.profile) {
       this.data = JSON.parse((await this.profileService.profile(this.profile)).body);
       this.data.username = "User " + this.data.username;
-
     } else {
-
       this.data = JSON.parse((await this.profileService.me()).body)
     }
 
@@ -37,7 +35,7 @@ export class ProfileComponent implements OnInit {
           label: "History",
           data: [],
           fill: false,
-          borderColor: '#42A5F5',
+          borderColor: '#B22222',
           tension: .1
         }
       ]
