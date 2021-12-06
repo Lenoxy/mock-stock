@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PrimeNGConfig} from "primeng/api";
-import {MenuItem} from 'primeng/api';
-import {AuthButtonComponent} from "./components/auth-button/auth-button.component";
+import {MenuItem, PrimeNGConfig} from "primeng/api";
 import {AuthService} from "./services/auth/auth.service";
 import {UserService} from "./services/user/user.service";
 
@@ -14,12 +12,13 @@ import {UserService} from "./services/user/user.service";
 export class AppComponent implements OnInit {
   title = 'mockstock';
   menuItems: MenuItem[] = [{}];
-  isLoggedIn= false;
+  isLoggedIn = false;
   money = 0
 
   constructor(private primengConfig: PrimeNGConfig,
               private userService: UserService,
-              private authService: AuthService) {}
+              private authService: AuthService) {
+  }
 
   async ngOnInit() {
     this.isLoggedIn = await this.isAuthorized()
@@ -33,20 +32,20 @@ export class AppComponent implements OnInit {
         routerLink: 'stock-list'
       },
       {
-        label:'Leaderboard',
-        icon:'pi pi-fw pi-pencil',
+        label: 'Leaderboard',
+        icon: 'pi pi-fw pi-pencil',
         routerLink: 'leaderboard'
       },
       {
-        label:'Profile',
-        icon:'pi pi-fw pi-user',
+        label: 'Profile',
+        icon: 'pi pi-fw pi-user',
         routerLink: 'profile'
       }
     ];
   }
 
   async getUserMoney(): Promise<void> {
-    if(await this.isAuthorized()) {
+    if (await this.isAuthorized()) {
       let response = (await this.userService.getUser()).body.replace(/\bNaN\b/g, "null")
       this.money = response.money_liquid;
     }

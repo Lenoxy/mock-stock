@@ -35,7 +35,7 @@ export class StockListComponent implements OnInit {
 
   async loadTable() {
     this.loading = true;
-    this.stocks = await this.stockService.getStockList((this.page - 1) * 25, ((this.page - 1) * 25) + 24);
+    this.stocks = await this.stockService.getStockList((this.page - 1) * 25, 24);
     this.loading = false;
   }
 
