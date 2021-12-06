@@ -20,4 +20,16 @@ export class StockService {
     return JSON.parse(<string>(await this.http.get(environment.host + 'stocks?skip=' + skip + '&top=' + top,
       {responseType: 'text', observe: "response"}).toPromise()).body);
   }
+
+  public async buyStock(id: string): Promise<HttpResponse<any>> {
+    const amount = 1
+    return await this.http.put(environment.host + "stocks/" + id,
+      {amount}, {withCredentials: true, responseType: 'text', observe: "response"}).toPromise()
+  }
+
+  public async sellStock(id: string): Promise<HttpResponse<any>> {
+    const amount = -1
+    return await this.http.put(environment.host + "stocks/" + id,
+      {amount}, {withCredentials: true, responseType: 'text', observe: "response"}).toPromise()
+  }
 }

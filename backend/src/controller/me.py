@@ -1,3 +1,4 @@
+import math
 from threading import current_thread
 from flask import Blueprint
 from flask_login import login_required, current_user
@@ -5,6 +6,7 @@ import finance
 import db
 
 me = Blueprint('me', __name__)
+
 
 @me.route("/me")
 @login_required
@@ -21,11 +23,11 @@ def get_me():
             for stock in stocks:
                 stock.amount = owned_stocks[stock.id].amount
                 money_in_stocks += stock.amount * stock.value
-            
+
             user.stocks = [stock.to_dict() for stock in stocks]
 
         user.money_in_stocks = money_in_stocks
-        
+
         return user.to_dict()
 
     except Exception as e:

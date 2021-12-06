@@ -36,8 +36,6 @@ def get_stocks():
             stock_list = list(db.get_stock_ids())
             local_stocks = finance.get_stocks(stock_list)
 
-        print(stock_list)
-
         if current_user.is_authenticated:
             owned_stocks = db.get_owned_stocks(current_user.username)
             for stock in local_stocks:

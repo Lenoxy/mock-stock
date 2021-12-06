@@ -1,6 +1,9 @@
 
-<div class="card">
-  <p-chart type="line" [data]="basicData" [options]="basicOptions"></p-chart>
-</div>
+<p-chart type="line" [data]="basicData" [options]="basicOptions"></p-chart>
 <h4>Change: {{change}}</h4>
 <h4>Value: {{value}}</h4>
+<h4>Owned amount: {{amount}}</h4>
+
+<app-purchase class="button" *ngIf="isMoney && isAuthorised"></app-purchase>
+<app-sell *ngIf="isStocks && isAuthorised"></app-sell>
+
