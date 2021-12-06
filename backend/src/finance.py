@@ -42,10 +42,7 @@ def get_stocks(stock_ids: list[str]) -> list[Stock]:
         stocks = []
 
         for stock_data in data.items():
-                
-            print(stock_data[1].iloc[1])
             stock = Stock()
-
             stock.id = stock_data[0]
             stock.value = stock_data[1].iloc[1]
 
@@ -59,8 +56,6 @@ def get_stocks(stock_ids: list[str]) -> list[Stock]:
             before = stock_data[1].iloc[0]
             now = stock_data[1].iloc[1]
             stock.change = (now / before - 1) * 100
-            print(before, now)
-
             stocks.append(stock)
 
         return stocks
@@ -97,7 +92,7 @@ def get_stock_values(stock_ids: list) -> dict[float]:
 
 
 def apply_transactions(history: dict[float], transactions: list[Transaction], amount_now: float = 0) -> dict[float]:
-    
+
     transactions.sort(key=lambda t: t.datetime, reverse=True)
     history = sorted(history, key=lambda h: h, reverse=True)
 
@@ -113,7 +108,7 @@ def apply_transactions(history: dict[float], transactions: list[Transaction], am
             i += 1
 
     return res_dict
-    
+
 
 
 if __name__ == '__main__':
