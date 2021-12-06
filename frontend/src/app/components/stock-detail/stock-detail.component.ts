@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {StockService} from "../../services/stock/stock.service";
 import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../services/auth/auth.service";
@@ -22,24 +22,24 @@ export class StockDetailComponent implements OnInit {
   id: string | undefined
   amount = 0
 
-   constructor(private stockservice: StockService,
-               private route: ActivatedRoute,
-               private authService: AuthService,
-               private userService: UserService) {
+  constructor(private stockservice: StockService,
+              private route: ActivatedRoute,
+              private authService: AuthService,
+              private userService: UserService) {
   }
 
- async ngOnInit(): Promise<void> {
-   this.id = this.route.snapshot.paramMap.get('id')!;
+  async ngOnInit(): Promise<void> {
+    this.id = this.route.snapshot.paramMap.get('id')!;
     this.isAuthorised = await this.isAuthorized()
     this.isMoney = await this.hasMoney()
-   this.isStocks = await this.hasStocks()
-   this.stock = JSON.parse((await this.stockservice.getStock(this.id)).body)
-   this.value = this.stock.value;
-   this.change = this.stock.change;
-   const historyValues = Object.values(this.stock.history)
-   const historyKeys = Object.keys(this.stock.history)
+    this.isStocks = await this.hasStocks()
+    this.stock = JSON.parse((await this.stockservice.getStock(this.id)).body)
+    this.value = this.stock.value;
+    this.change = this.stock.change;
+    const historyValues = Object.values(this.stock.history)
+    const historyKeys = Object.keys(this.stock.history)
     this.basicData = {
-      labels: [...historyKeys],
+      labels: this.parseDate(historyKeys),
       datasets: [
         {
           label: this.stock.name,
@@ -51,6 +51,11 @@ export class StockDetailComponent implements OnInit {
       ]
     }
   }
+
+  parseDate(dates: string[]): string[] {
+    return dates.map((date) => new Date(date).toLocaleDateString("de-CH"))
+  }
+
 
   updateOptions() {
     this.basicOptions = {
@@ -92,9 +97,9 @@ export class StockDetailComponent implements OnInit {
     return await this.getStockAmount(response.stocks) > 0
   }
 
-  async getStockAmount(stocks: any): Promise<number>{
-    for(const stock of stocks) {
-      if(stock.id === this.id) {
+  async getStockAmount(stocks: any): Promise<number> {
+    for (const stock of stocks) {
+      if (stock.id === this.id) {
         this.amount = stock.amount
         return stock.amount;
       }
