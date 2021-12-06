@@ -10,9 +10,7 @@ def get_user(username: str) -> User:
 
     collection = mongodb.mongo_client.user
     user = collection.find_one(filter)
-    if user:
-        return User(user)
-    raise Exception('Could not find user')
+    return User(user)
 
 
 def get_users() -> list[User]:
