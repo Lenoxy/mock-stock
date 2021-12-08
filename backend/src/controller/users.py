@@ -70,14 +70,19 @@ def get_user(username):
 
         for t in transactions:
             histories['keys'].append(t.datetime)
-            histories['liquid_money'].append(tmp_money_liquid + t.amount * t.stock_price)
-            histories['stock_money'].append(tmp_stock_money - t.amount * t.stock_price)
-            histories['score'].append((tmp_money_liquid + t.amount * t.stock_price) + (tmp_stock_money - t.amount * t.stock_price))
+            histories['liquid_money'].append(tmp_money_liquid)
+            histories['stock_money'].append(tmp_stock_money)
+            histories['score'].append(tmp_money_liquid + tmp_stock_money)
 
             tmp_money_liquid += t.amount * t.stock_price
             tmp_stock_money -= t.amount * t.stock_price
 
-        user.histories = histories
+        histories['keys'].reverse()
+        histories['liquid_money'].reverse()
+        histories['stock_money'].reverse()
+        histories['score'].reverse()
+
+        user.histories= histories
 
         user.money_in_stocks = money_in_stocks
         return user.to_dict()
