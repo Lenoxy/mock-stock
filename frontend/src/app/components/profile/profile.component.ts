@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit {
   private profile: string | undefined
 
   data: any
+  history: any
   basicData: any
   basicOptions: any
   loading = false; // Used only for loading next page, not initial loading
@@ -31,13 +32,27 @@ export class ProfileComponent implements OnInit {
     }
 
     this.basicData = {
-      labels: [],
+      labels: this.data.histories.keys,
       datasets: [
         {
-          label: "History",
-          data: [],
+          label: "Liquid Money",
+          data: this.data.histories.liquid_money,
           fill: false,
           borderColor: '#B22222',
+          tension: .1
+        },
+        {
+          label: "Score",
+          data: this.data.histories.score,
+          fill: false,
+          borderColor: '#550a8a',
+          tension: .1
+        },
+        {
+          label: "Stock Money",
+          data: this.data.histories.stock_money,
+          fill: false,
+          borderColor: '#00ba00',
           tension: .1
         }
       ]
