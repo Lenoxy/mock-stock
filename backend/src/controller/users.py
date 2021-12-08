@@ -17,7 +17,8 @@ def get_users():
             if not stock.upper() in stock_ids:
                 stock_ids.append(stock.upper())
 
-    stock_values = finance.get_stock_values(stock_ids)
+    if stock_values:
+        stock_values = finance.get_stock_values(stock_ids)
 
     for user in users:
         for stock in user.owned_stocks:
