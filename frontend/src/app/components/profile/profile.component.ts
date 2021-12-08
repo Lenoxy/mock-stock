@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {ProfileService} from '../../services/profile/profile.service';
+import {UserService} from "../../services/user/user.service";
 
 @Component({
   selector: 'app-profile',
@@ -9,7 +9,7 @@ import {ProfileService} from '../../services/profile/profile.service';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private profileService: ProfileService) {
+  constructor(private route: ActivatedRoute, private userService: UserService) {
   }
 
   // If profile is undefined, the user is on his own page.
@@ -22,10 +22,10 @@ export class ProfileComponent implements OnInit {
   async ngOnInit() {
     this.profile = this.route.snapshot.paramMap.get('id')!;
     if (this.profile) {
-      this.data = JSON.parse((await this.profileService.profile(this.profile)).body);
+      this.data = JSON.parse((await this.userService.getProfile(this.profile)).body);
       this.data.username = "User " + this.data.username;
     } else {
-      this.data = JSON.parse((await this.profileService.me()).body)
+      this.data = JSON.parse((await this.userService.getOwnUser()).body)
     }
 
     this.basicData = {

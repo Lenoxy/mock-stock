@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ProfileService} from '../../services/profile/profile.service';
 import {Router} from '@angular/router';
+import {UserService} from "../../services/user/user.service";
 
 @Component({
   selector: 'app-leaderboard',
@@ -9,14 +9,14 @@ import {Router} from '@angular/router';
 })
 export class LeaderboardComponent implements OnInit {
 
-  constructor(private profileService: ProfileService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   leaderboard: any;
   displayedColumns: string[] = ['username', 'score', 'moneyInStocks'];
 
 
   async ngOnInit() {
-    this.leaderboard = JSON.parse((await this.profileService.leaderboard()).body);
+    this.leaderboard = JSON.parse((await this.userService.getLeaderboard()).body);
   }
 
   async onRowClick(user: any) {

@@ -11,8 +11,18 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  async getUser(): Promise<HttpResponse<any>> {
+  public async getOwnUser(): Promise<HttpResponse<any>> {
     return await this.http.get(environment.host + 'me',
       {responseType: 'text', withCredentials: true, observe: "response"}).toPromise()
+  }
+
+  public async getLeaderboard(): Promise<HttpResponse<any>> {
+    return await this.http.get(environment.host + "users" ,
+      {responseType: 'text', withCredentials: true, observe: "response"}).toPromise();
+  }
+
+  public async getProfile(username: string): Promise<HttpResponse<any>> {
+    return await this.http.get(environment.host + "users/" + username ,
+      {responseType: 'text', withCredentials: true, observe: "response"}).toPromise();
   }
 }

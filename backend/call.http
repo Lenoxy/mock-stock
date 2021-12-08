@@ -32,6 +32,6 @@ Content-Type: application/json
 GET http://localhost:5000/me
 
 ###
+GET http://localhost:5000/users/test/histories
 
-GET http://localhost:5000/users
 
