@@ -1,7 +1,5 @@
-import json
-
-from flask.json import JSONEncoder
 from flask_login import UserMixin
+
 
 class User(UserMixin):
     def __init__(self, user=None):

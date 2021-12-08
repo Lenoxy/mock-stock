@@ -1,6 +1,6 @@
-import db
-from models import Transaction, Stock
 import yfinance as yf
+from models import Transaction, Stock
+import db
 
 
 stock_dict = db.get_stock_ids()

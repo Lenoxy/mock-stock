@@ -1,8 +1,7 @@
-from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
+from pymongo import MongoClient
 import os
-
 from models import User, Transaction, OwnedStock
 
 

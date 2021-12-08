@@ -1,5 +1,6 @@
 from flask import Blueprint, send_file
 
+
 swagger = Blueprint('swagger', __name__)
 
 @swagger.route("/swagger")

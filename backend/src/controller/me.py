@@ -1,10 +1,7 @@
-import math
-from threading import current_thread
-from flask import Blueprint
 from flask_login import login_required, current_user
-import finance
-import db
+from flask import Blueprint
 from controller import users
+
 
 me = Blueprint('me', __name__)
 

@@ -3,6 +3,7 @@ from datetime import datetime
 import finance
 import db
 
+
 users = Blueprint('users', __name__)
 
 

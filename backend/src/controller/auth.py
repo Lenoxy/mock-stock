@@ -1,10 +1,10 @@
-from hashlib import sha512
-
-import db
-import flask
-from flask import Blueprint, request
 from flask_login import login_user, logout_user, login_required, current_user
+from flask import Blueprint, request
+from hashlib import sha512
 from models import User
+import flask
+import db
+
 
 auth = Blueprint('auth', __name__)
 
