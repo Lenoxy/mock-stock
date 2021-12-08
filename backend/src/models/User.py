@@ -13,13 +13,15 @@ class User(UserMixin):
         self.money_in_stocks: float = 0
         self.stocks = []
         self.is_authenticated = True
+        self.histories = None
 
     def to_dict(self):
         return {"username": self.username,
                 "money_liquid": self.money_liquid,
                 "money_in_stocks": self.money_in_stocks,
                 "score": self.money_liquid + self.money_in_stocks,
-                "stocks": self.stocks}
+                "stocks": self.stocks,
+                "histories": self.histories}
 
     def is_authenticated(self):
         return True

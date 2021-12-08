@@ -33,6 +33,10 @@ def get_users():
 def get_user(username):
     try:
         user = db.get_user(username)
+
+        if not user:
+            return f'Could not find user: {username}', 404
+
         money_in_stocks = 0.0
 
         owned_stocks = db.get_owned_stocks(username)
@@ -45,32 +49,38 @@ def get_user(username):
 
             user.stocks = [stock.to_dict() for stock in stocks]
 
+        # Calculation histories
+        transactions = db.get_transactions(username)
+        transactions = sorted(transactions, key=lambda t: t.datetime, reverse=False)
+
+        histories = {
+            'keys': [],
+            'liquid_money': [],
+            'stock_money': [],
+            'score': []
+        }
+        tmp_money_liquid = user.money_liquid
+        tmp_stock_money = money_in_stocks
+
+        # Appending first current value to history
+        histories['keys'].append(datetime.now().isoformat())
+        histories['liquid_money'].append(tmp_money_liquid)
+        histories['stock_money'].append(money_in_stocks)
+        histories['score'].append(tmp_money_liquid + tmp_stock_money)
+
+        for t in transactions:
+            histories['keys'].append(t.datetime)
+            histories['liquid_money'].append(tmp_money_liquid + t.amount * t.stock_price)
+            histories['stock_money'].append(tmp_stock_money - t.amount * t.stock_price)
+            histories['score'].append((tmp_money_liquid + t.amount * t.stock_price) + (tmp_stock_money - t.amount * t.stock_price))
+
+            tmp_money_liquid += t.amount * t.stock_price
+            tmp_stock_money -= t.amount * t.stock_price
+
+        user.histories = histories
+
         user.money_in_stocks = money_in_stocks
         return user.to_dict()
-
-    except Exception as e:
-        return str(e), 400
-
-
-@users.route("/users/<string:username>/histories")
-def get_user_stocks(username):
-    try:
-        user = db.get_user(username)
-        if not user:
-            return f'Could not find user: {username}', 404
-
-        transactions = db.get_transactions(username)
-
-        transactions = sorted(transactions, key=lambda t: t.datetime, reverse=True)
-
-        liquid_money_set = {}
-        liquid_money_set[datetime.now().isoformat()] = user.money_liquid
-        for t in transactions:
-            liquid_money_set[t.datetime] = user.money_liquid + t.amount * t.stock_price
-            user.money_liquid += t.amount * t.stock_price
-
-        return jsonify(liquid_money_set)
-
 
     except Exception as e:
         return str(e), 400
