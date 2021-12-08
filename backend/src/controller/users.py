@@ -51,7 +51,7 @@ def get_user(username):
 
         # Calculation histories
         transactions = db.get_transactions(username)
-        transactions = sorted(transactions, key=lambda t: t.datetime, reverse=False)
+        transactions = sorted(transactions, key=lambda t: t.datetime, reverse=True)
 
         histories = {
             'keys': [],
