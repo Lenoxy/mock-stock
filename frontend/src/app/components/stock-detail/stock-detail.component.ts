@@ -95,8 +95,11 @@ export class StockDetailComponent implements OnInit {
   }
 
   async hasStocks(): Promise<boolean> {
-    let response = JSON.parse((await this.userService.getOwnUser()).body.replace(/\bNaN\b/g, "null"))
-    return await this.getStockAmount(response.stocks) > 0
+    if(this.isAuthorised) {
+      let response = JSON.parse((await this.userService.getOwnUser()).body.replace(/\bNaN\b/g, "null"))
+      return await this.getStockAmount(response.stocks) > 0
+    }
+    return false;
   }
 
   async getStockAmount(stocks: any): Promise<number> {
@@ -110,8 +113,11 @@ export class StockDetailComponent implements OnInit {
   }
 
   async hasMoney(): Promise<boolean> {
-    let response = JSON.parse((await this.userService.getOwnUser()).body.replace(/\bNaN\b/g, "null"))
-    return response.money_liquid > 0
+    if(this.isAuthorised) {
+      let response = JSON.parse((await this.userService.getOwnUser()).body.replace(/\bNaN\b/g, "null"))
+      return response.money_liquid > 0
+    }
+    return false;
   }
 
   async buyStock(amount: number){
