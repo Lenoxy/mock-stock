@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from "../../services/user/user.service";
 
 @Component({
@@ -9,7 +9,7 @@ import {UserService} from "../../services/user/user.service";
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private userService: UserService) {
+  constructor(private route: ActivatedRoute, private userService: UserService, private router: Router) {
   }
 
   // If profile is undefined, the user is on his own page.
@@ -18,6 +18,8 @@ export class ProfileComponent implements OnInit {
   data: any
   basicData: any
   basicOptions: any
+  loading = false; // Used only for loading next page, not initial loading
+  displayedColumns: string[] = ['id', 'name', 'change', 'value', 'amount'];
 
   async ngOnInit() {
     this.profile = this.route.snapshot.paramMap.get('id')!;
@@ -70,6 +72,10 @@ export class ProfileComponent implements OnInit {
         }
       }
     };
+  }
+
+  async onRowClick(row: any) {
+    await this.router.navigateByUrl('stock-detail/' + row.id)
   }
 
 }
