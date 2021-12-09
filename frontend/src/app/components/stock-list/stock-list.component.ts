@@ -30,7 +30,10 @@ export class StockListComponent implements OnInit {
           this.page = params.page;
         }
       );
-    await this.loadTable()
+    setTimeout(() =>
+      this.loadTable()
+    , 600);
+
   }
 
   async loadTable() {

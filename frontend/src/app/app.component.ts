@@ -48,7 +48,6 @@ export class AppComponent implements OnInit {
     if (await this.isAuthorized()) {
       let response = JSON.parse((await this.userService.getOwnUser()).body.replace(/\bNaN\b/g, "null"))
       this.money = response.money_liquid;
-
     }
   }
 

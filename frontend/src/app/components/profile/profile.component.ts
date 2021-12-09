@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from "../../services/user/user.service";
+import {AuthService} from "../../services/auth/auth.service";
 
 @Component({
   selector: 'app-profile',
@@ -9,7 +10,7 @@ import {UserService} from "../../services/user/user.service";
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private router: Router) {
+  constructor(private route: ActivatedRoute, private userService: UserService, private router: Router, private authService: AuthService) {
   }
 
   // If profile is undefined, the user is on his own page.
@@ -19,10 +20,15 @@ export class ProfileComponent implements OnInit {
   history: any
   basicData: any
   basicOptions: any
+  isLoggedin: any
   loading = false; // Used only for loading next page, not initial loading
   displayedColumns: string[] = ['id', 'name', 'change', 'value', 'amount'];
 
   async ngOnInit() {
+    this.isLoggedin = await this.isAuthorized()
+    if(!this.isLoggedin) {
+      await this.router.navigateByUrl('stock-list')
+    }
     this.profile = this.route.snapshot.paramMap.get('id')!;
     if (this.profile) {
       this.data = JSON.parse((await this.userService.getProfile(this.profile)).body);
@@ -87,6 +93,11 @@ export class ProfileComponent implements OnInit {
         }
       }
     };
+  }
+
+  async isAuthorized(): Promise<boolean> {
+    const authStatus = await this.authService.isLoggedin()
+    return authStatus.body != 'False';
   }
 
   async onRowClick(row: any) {
