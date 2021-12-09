@@ -20,13 +20,13 @@ export class ProfileComponent implements OnInit {
   history: any
   basicData: any
   basicOptions: any
-  isLoggedin: any
+  isLoggedIn: any
   loading = false; // Used only for loading next page, not initial loading
   displayedColumns: string[] = ['id', 'name', 'change', 'value', 'amount'];
 
   async ngOnInit() {
-    this.isLoggedin = await this.isAuthorized()
-    if(!this.isLoggedin) {
+    this.isLoggedIn = await this.isAuthorized()
+    if(!this.isLoggedIn) {
       await this.router.navigateByUrl('stock-list')
     }
     this.profile = this.route.snapshot.paramMap.get('id')!;
@@ -38,7 +38,7 @@ export class ProfileComponent implements OnInit {
     }
 
     this.basicData = {
-      labels: this.data.histories.keys,
+      labels: this.parseDate(this.data.histories.keys),
       datasets: [
         {
           label: "Liquid Money",
@@ -63,6 +63,10 @@ export class ProfileComponent implements OnInit {
         }
       ]
     }
+  }
+
+  parseDate(dates: string[]): string[] {
+    return dates.map((date) => new Date(date).toLocaleDateString("de-CH"))
   }
 
   updateOptions() {
