@@ -1,11 +1,11 @@
 class Transaction():
-    def __init__(self, transaction=None):
-        if transaction and transaction['username'] and transaction['datetime'] and transaction['stock_id'] and transaction['amount'] and transaction['stock_price']:
-            self.username = transaction['username']
-            self.datetime = transaction['datetime']
-            self.stock_id = transaction['stock_id']
-            self.amount = transaction['amount']
-            self.stock_price = transaction['stock_price']
+    def __init__(self, transaction={}):
+        self.username = transaction['username'] if 'username' in transaction else None
+        self.datetime = transaction['datetime'] if 'datetime' in transaction else None
+        self.stock_id = transaction['stock_id'] if 'stock_id' in transaction else None
+        self.amount = transaction['amount'] if 'amount' in transaction else None
+        self.stock_price = transaction['stock_price'] if 'stock_price' in transaction else None
+        
 
     def to_dict(self):
         return {'username': self.username,

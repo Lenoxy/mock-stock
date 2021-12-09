@@ -18,7 +18,7 @@ def get_users():
             if not stock.upper() in stock_ids:
                 stock_ids.append(stock.upper())
 
-    if not stock_values:
+    if stock_ids:
         stock_values = finance.get_stock_values(stock_ids)
 
     for user in users:
@@ -85,10 +85,13 @@ def get_user(username):
             histories['stock_money'].reverse()
             histories['score'].reverse()
 
-            user.histories= histories
+            user.histories = histories
+        else:
+            user.histories = None
 
         user.money_in_stocks = money_in_stocks
         return user.to_dict()
 
     except Exception as e:
+        raise
         return str(e), 400
