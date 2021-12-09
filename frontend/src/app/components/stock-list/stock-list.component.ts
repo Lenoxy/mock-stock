@@ -32,7 +32,7 @@ export class StockListComponent implements OnInit {
       );
     setTimeout(() =>
       this.loadTable()
-    , 600);
+    , 1000);
 
   }
 
