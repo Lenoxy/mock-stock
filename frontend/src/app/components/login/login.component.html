@@ -7,7 +7,7 @@
 
   <div class="form-input">
     <div class="p-mb-3 p-text-left">Password:</div>
-    <p-password [(ngModel)]="password" [feedback]="false"></p-password>
+    <p-password [(ngModel)]="password" [feedback]="false" (keyup.enter)="login()"></p-password>
   </div>
 
   <button mat-raised-button  color="primary" (click)="login()">Login</button>

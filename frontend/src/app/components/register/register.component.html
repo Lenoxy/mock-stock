@@ -12,7 +12,7 @@
 
   <div class="form-input">
     <div class="p-mb-3 p-text-left">Repeat Password:</div>
-    <p-password [(ngModel)]="repeatPassword" [feedback]="false"></p-password>
+    <p-password [(ngModel)]="repeatPassword" [feedback]="false" (keyup.enter)="register()"></p-password>
   </div>
 
   <button mat-raised-button color="primary" (click)="register()">Register</button>
