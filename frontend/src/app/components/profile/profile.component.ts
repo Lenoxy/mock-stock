@@ -20,15 +20,10 @@ export class ProfileComponent implements OnInit {
   history: any
   basicData: any
   basicOptions: any
-  isLoggedIn: any
   loading = false; // Used only for loading next page, not initial loading
   displayedColumns: string[] = ['id', 'name', 'change', 'value', 'amount'];
 
   async ngOnInit() {
-    this.isLoggedIn = await this.isAuthorized()
-    if(!this.isLoggedIn) {
-      await this.router.navigateByUrl('stock-list')
-    }
     this.profile = this.route.snapshot.paramMap.get('id')!;
     if (this.profile) {
       this.data = JSON.parse((await this.userService.getProfile(this.profile)).body);
