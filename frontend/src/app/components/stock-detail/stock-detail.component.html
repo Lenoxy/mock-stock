@@ -3,11 +3,15 @@
 <h4>Value: {{value | number :"0.0-2" }}$</h4>
 <h4>Owned amount: {{ownedAmount | number :"0.0-2" }}</h4>
 
-<button class="button" *ngIf="isMoney && isAuthorised" mat-stroked-button (click)="buyStock(amountToManipulate)" color="accent">Buy
+<button *ngIf="isStocks && isAuthorised" mat-stroked-button class="button" (click)="sellStock(amountToManipulate)"
+        color="accent">Sell
 </button>
-<mat-form-field class="example-full-width" appearance="fill" *ngIf="isStocks && isAuthorised">
+<mat-form-field class="example-full-width" appearance="fill"
+                *ngIf="(isMoney && isAuthorised) ||(isStocks && isAuthorised)">
   <input matInput type="number" min="0" step="1" [(ngModel)]="amountToManipulate">
 </mat-form-field>
-<button *ngIf="isStocks && isAuthorised" mat-stroked-button class="button" (click)="sellStock(amountToManipulate)" color="accent">Sell</button>
+<button class="button" *ngIf="isMoney && isAuthorised" mat-stroked-button (click)="buyStock(amountToManipulate)"
+        color="accent">Buy
+</button>
 
 
