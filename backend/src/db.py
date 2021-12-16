@@ -44,12 +44,11 @@ def create_user(user: User) -> User:
 
 # Transactions
 def get_transactions(username: str) -> list[Transaction]:
-    since_date = (date.today() - timedelta(days=5)).isoformat()
 
     transaction_collection = mongodb.mongo_client.transaction
     transactions = mongodb.find(transaction_collection)
 
-    return filter(lambda t: t.username == username and t.datetime >= since_date, transactions)
+    return filter(lambda t: t.username == username, transactions)
 
 
 def create_transaction(transaction: Transaction) -> Transaction:
