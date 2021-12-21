@@ -46,6 +46,8 @@ def get_user(username):
             stock_ids = [key for key in owned_stocks]
             stocks = finance.get_stocks(stock_ids)
             for stock in stocks:
+                if finance.isNaN(stock.value):
+                    stock.value = 0
                 stock.amount = owned_stocks[stock.id].amount
                 money_in_stocks += stock.amount * stock.value
 
