@@ -1,7 +1,11 @@
 import csv
+import math
 from models import User, OwnedStock, Transaction
 import mongodb
-from finance import isNaN
+
+
+def isNaN(num):
+    return math.isnan(num)
 
 
 # Users
