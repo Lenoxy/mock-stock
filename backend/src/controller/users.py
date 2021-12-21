@@ -39,7 +39,7 @@ def get_user(username):
         if not user:
             return f'Could not find user: {username}', 404
 
-        money_in_stocks = 0.0
+        user.money_in_stocks = 0.0
 
         owned_stocks = db.get_owned_stocks(username)
         if owned_stocks:
@@ -49,7 +49,7 @@ def get_user(username):
                 if finance.isNaN(stock.value):
                     stock.value = 0
                 stock.amount = owned_stocks[stock.id].amount
-                money_in_stocks += stock.amount * stock.value
+                user.money_in_stocks += stock.amount * stock.value
 
             user.stocks = [stock.to_dict() for stock in stocks]
 
@@ -66,21 +66,23 @@ def get_user(username):
                 'score': []
             }
             tmp_money_liquid = user.money_liquid
-            tmp_stock_money = money_in_stocks
+            tmp_stock_money = user.money_in_stocks
 
             # Appending first current value to history
             histories['keys'].append(datetime.now().isoformat())
             histories['liquid_money'].append(tmp_money_liquid)
-            histories['stock_money'].append(money_in_stocks)
+            histories['stock_money'].append(user.money_in_stocks)
             histories['score'].append(tmp_money_liquid + tmp_stock_money)
 
             for t in transactions:
+
+                tmp_money_liquid += t.amount * t.stock_price
+                
                 histories['keys'].append(t.datetime)
                 histories['liquid_money'].append(tmp_money_liquid)
                 histories['stock_money'].append(tmp_stock_money)
                 histories['score'].append(tmp_money_liquid + tmp_stock_money)
 
-                tmp_money_liquid += t.amount * t.stock_price
                 tmp_stock_money -= t.amount * t.stock_price
 
             histories['keys'].reverse()
@@ -92,7 +94,6 @@ def get_user(username):
         else:
             user.histories = None
 
-        user.money_in_stocks = money_in_stocks
         return user.to_dict()
 
     except Exception as e:
