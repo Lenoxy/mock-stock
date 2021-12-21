@@ -110,6 +110,9 @@ def apply_transactions(history: dict[float], transactions: list[Transaction], am
     return res_dict
 
 
+def isNaN(num):
+    return math.isnan(num)
+
 
 if __name__ == '__main__':
     print(apply_transactions({}))

@@ -3,15 +3,10 @@ from flask import Blueprint, request, jsonify
 from models import OwnedStock, Transaction
 from datetime import datetime
 import finance
-import math
 import db
 
 
 stocks = Blueprint('stocks', __name__)
-
-
-def isNaN(num):
-    return math.isnan(num)
 
 
 @stocks.route("/stocks")
@@ -45,10 +40,10 @@ def get_stocks():
         serialized_stocks = []
 
         for stock in local_stocks:
-            if isNaN(stock.change):
+            if finance.isNaN(stock.change):
                 stock.change = None
 
-            if isNaN(stock.value):
+            if finance.isNaN(stock.value):
                 stock.value = None
 
             serialized_stocks.append(stock.to_dict())

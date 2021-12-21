@@ -1,13 +1,13 @@
-from datetime import date, timedelta
 import csv
 from models import User, OwnedStock, Transaction
 import mongodb
+from finance import isNaN
 
 
 # Users
 def get_user(username: str) -> User:
     filter = {"username": username}
-
+ 
     collection = mongodb.mongo_client.user
     user = collection.find_one(filter)
     if not user:
@@ -48,7 +48,7 @@ def get_transactions(username: str) -> list[Transaction]:
     transaction_collection = mongodb.mongo_client.transaction
     transactions = mongodb.find(transaction_collection)
 
-    return filter(lambda t: t.username == username, transactions)
+    return filter(lambda t: t.username == username and not isNaN(t.stock_price), transactions)
 
 
 def create_transaction(transaction: Transaction) -> Transaction:

@@ -23,7 +23,8 @@ def get_users():
 
     for user in users:
         for stock in user.owned_stocks:
-            user.money_in_stocks += user.owned_stocks[stock.upper()].amount * stock_values[stock.upper()]
+            if not finance.isNaN(stock_values[stock.upper()]):
+                user.money_in_stocks += user.owned_stocks[stock.upper()].amount * stock_values[stock.upper()]
 
     users = sorted(users, key=lambda user: user.money_in_stocks + user.money_liquid, reverse=True)
 
