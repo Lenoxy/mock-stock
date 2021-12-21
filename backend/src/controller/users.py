@@ -68,7 +68,7 @@ def get_user(username):
             tmp_money_liquid = user.money_liquid
             tmp_stock_money = user.money_in_stocks
 
-            # Appending first current value to history
+            # Appending current value to history
             histories['keys'].append(datetime.now().isoformat())
             histories['liquid_money'].append(tmp_money_liquid)
             histories['stock_money'].append(user.money_in_stocks)
@@ -76,14 +76,18 @@ def get_user(username):
 
             for t in transactions:
 
-                tmp_money_liquid += t.amount * t.stock_price
-                
                 histories['keys'].append(t.datetime)
                 histories['liquid_money'].append(tmp_money_liquid)
                 histories['stock_money'].append(tmp_stock_money)
                 histories['score'].append(tmp_money_liquid + tmp_stock_money)
 
+                tmp_money_liquid += t.amount * t.stock_price
                 tmp_stock_money -= t.amount * t.stock_price
+
+            histories['keys'].append("2021-11-1")
+            histories['liquid_money'].append(20000)
+            histories['stock_money'].append(0)
+            histories['score'].append(20000)
 
             histories['keys'].reverse()
             histories['liquid_money'].reverse()
