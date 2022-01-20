@@ -10,7 +10,7 @@ users = Blueprint('users', __name__)
 @users.route("/users")
 def get_users():
     users = db.get_users()
-    users = filter(lambda user: user.username, users)
+    users = filter(lambda user: hasattr(user, 'username'), users)
     stock_ids = []
     stock_values = {}
     for user in users:
