@@ -13,7 +13,7 @@ def get_users():
     new_users = []
     for user in users:
         if hasattr(user, 'username'):
-            new_users.push(user)
+            new_users.append(user)
 
     users = new_users
     stock_ids = []
