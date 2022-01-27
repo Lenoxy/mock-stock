@@ -9,36 +9,32 @@ users = Blueprint('users', __name__)
 
 @users.route("/users")
 def get_users():
-    try:
-        users = db.get_users()
-        new_users = []
-        for user in users:
-            if hasattr(user, 'username'):
-                new_users.append(user)
+    users = db.get_users()
+    new_users = []
+    for user in users:
+        if hasattr(user, 'username'):
+            new_users.push(user)
 
-        users = new_users
-        stock_ids = []
-        stock_values = {}
-        for user in users:
-            user.owned_stocks = db.get_owned_stocks(user.username)
-            for stock in user.owned_stocks:
-                if not stock.upper() in stock_ids and stock == 'INTEW':
-                    stock_ids.append(stock.upper())
+    users = new_users
+    stock_ids = []
+    stock_values = {}
+    for user in users:
+        user.owned_stocks = db.get_owned_stocks(user.username)
+        for stock in user.owned_stocks:
+            if not stock.upper() in stock_ids:
+                stock_ids.append(stock.upper())
 
-        if stock_ids:
-            stock_values = finance.get_stock_values(stock_ids)
+    if stock_ids:
+        stock_values = finance.get_stock_values(stock_ids)
 
-        for user in users:
-            for stock in user.owned_stocks:
-                if stock != 'INTEW':
-                    if not finance.isNaN(stock_values[stock.upper()]):
-                        user.money_in_stocks += user.owned_stocks[stock.upper()].amount * stock_values[stock.upper()]
+    for user in users:
+        for stock in user.owned_stocks:
+            if not finance.isNaN(stock_values[stock.upper()]):
+                user.money_in_stocks += user.owned_stocks[stock.upper()].amount * stock_values[stock.upper()]
 
-        users = sorted(users, key=lambda user: user.money_in_stocks + user.money_liquid, reverse=True)
+    users = sorted(users, key=lambda user: user.money_in_stocks + user.money_liquid, reverse=True)
 
-        return jsonify([u.to_dict() for u in users])
-    except Exception as e:
-        return str(e), 400
+    return jsonify([u.to_dict() for u in users])
 
 
 @users.route("/users/<string:username>")
