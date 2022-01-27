@@ -10,13 +10,18 @@ users = Blueprint('users', __name__)
 @users.route("/users")
 def get_users():
     users = db.get_users()
-    users = filter(lambda user: hasattr(user, 'username'), users)
+    new_users = []
+    for user in users:
+        if hasattr(user, 'username'):
+            new_users.push(user)
+
+    users = new_users
     stock_ids = []
     stock_values = {}
     for user in users:
         user.owned_stocks = db.get_owned_stocks(user.username)
         for stock in user.owned_stocks:
-            if not stock.upper() in stock_ids:
+            if not stock.upper() in stock_ids and stock == 'INTEW':
                 stock_ids.append(stock.upper())
 
     if stock_ids:
@@ -24,8 +29,9 @@ def get_users():
 
     for user in users:
         for stock in user.owned_stocks:
-            if not finance.isNaN(stock_values[stock.upper()]):
-                user.money_in_stocks += user.owned_stocks[stock.upper()].amount * stock_values[stock.upper()]
+            if stock != 'INTEW':
+                if not finance.isNaN(stock_values[stock.upper()]):
+                    user.money_in_stocks += user.owned_stocks[stock.upper()].amount * stock_values[stock.upper()]
 
     users = sorted(users, key=lambda user: user.money_in_stocks + user.money_liquid, reverse=True)
 
