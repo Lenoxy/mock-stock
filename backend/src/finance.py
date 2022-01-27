@@ -82,6 +82,8 @@ def get_stock_with_history(stock_id: str) -> Stock:
 
 def get_stock_value(stock_id: str):
     data = yf.download( tickers=stock_id, period="1d", interval="1d")['Close']
+    if not data[0]:
+        return 0
     return data[0]
 
 
